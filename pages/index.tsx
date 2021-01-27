@@ -1,14 +1,15 @@
-import { Button, Flex, Image, Text } from "@chakra-ui/react";
+import { Button, Flex, Image, Text, useTheme } from "@chakra-ui/react";
 import CustomHeader from "./components/header";
 import { shade } from 'polished'
 import { useRouter } from 'next/router'
 
-export default function Home() {
+const Home: React.FC = () => {
+  const theme = useTheme()
   const router = useRouter();
 
-  const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleOnClick = (e: any) => {
     e.preventDefault()
-    router.push("/teste")
+    router.push("/create-budget")
   }
 
 
@@ -17,10 +18,12 @@ export default function Home() {
       <CustomHeader />
       <Image src="undraw.svg" width="720px" marginTop="30px"/>
       <Text fontSize="24px" mt="20px" fontWeight="600" color="#000">Crie sua planilha orçamentária de forma fácil e rápida</Text>
-      <Button onClick={handleOnClick} bg="#6F10BA" color="#FFF" mt="40px" _hover={{
-        bg: shade(0.2, "#6F10BA")
+      <Button onClick={handleOnClick} bg="brand.primary" color="#FFF" mt="40px" _hover={{
+        bg: shade(0.2, theme.colors.brand.primary)
       }}>Criar Novo</Button>
     </Flex>
 
   )
 }
+
+export default Home

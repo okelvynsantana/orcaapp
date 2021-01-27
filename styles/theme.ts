@@ -7,14 +7,26 @@ const global =  {
   },
   "body": {
     background: "#EEE",
-    font: "Poppins"
   }
 }
 
+
 const fonts = {
-  body: "Poppins"
+  default: "Poppins sans-serif",
+  body: "Poppins, Helvetica, sans-serif"
 }
 
-export const theme = extendTheme({ styles: {
+const colors = {
+  brand: {
+    primary: "#6F10BA"
+  }
+}
+const Input = {
+  defaultProps: {
+    focusBorderColor: colors.brand.primary
+  }
+}
+
+export const theme = extendTheme({ components: {Input}, fonts, colors, styles: {
   global,
 } })
