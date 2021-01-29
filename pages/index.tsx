@@ -1,5 +1,5 @@
 import { Button, Flex, Image, Text, useTheme } from "@chakra-ui/react";
-import CustomHeader from "./components/header";
+import CustomHeader from "../components/header";
 import { shade } from 'polished'
 import { useRouter } from 'next/router'
 
