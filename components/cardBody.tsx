@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/react"
 
 const CardBody: React.FC = (props) => {
   return(
-    <Flex bg="#FFF" padding="40px" width="75%" mt="20px" borderRadius="6px">
+    <Flex bg="#FFF" padding="40px" width="75%" mt="20px" borderRadius="6px" flexDir="column">
       {props.children}
     </Flex>
   )

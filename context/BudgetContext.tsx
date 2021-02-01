@@ -1,4 +1,5 @@
 import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
+import ConstructionStep from "../components/ConstructionStep";
 
 interface IBasicData {
   constructionName: string;
@@ -8,14 +9,29 @@ interface IBasicData {
   bdi: number;
 }
 
+interface IService {
+  serviceCode: string;
+  serviceDescription: string;
+  und: string;
+  coef: string;
+  qtd: number;
+}
+
+interface IConstuctionStep {
+  stepName: string;
+  services: IService[];
+}
+
 interface IBudgetData {
   basicData: IBasicData;
+  constructionSteps: IConstuctionStep[];
+  setConstructionSteps: (constructionSteps: IConstuctionStep[]) => void
   step: number;
   setStep: (step: number) => void;
   setBasicData: (data: IBasicData) => void;
 }
 
-const budgetState = {
+const budgetState: IBudgetData = {
   basicData: {
     constructionName: "",
     proprietary: "",
@@ -25,15 +41,19 @@ const budgetState = {
   },
   setBasicData: () => {},
   step: 1,
-  setStep: () => {}
+  setStep: () => {},
+  constructionSteps: [],
+  setConstructionSteps: () => {}
+
 };
 const BudgetContext = createContext<IBudgetData>(budgetState);
 
 function BudgetProvider({ children }) {
   const [basicData, setBasicData] = useState(budgetState.basicData);
   const [step, setStep] = useState(1)
+  const [constructionSteps, setConstructionSteps]  = useState([])
   return (
-    <BudgetContext.Provider value={{ basicData, setBasicData, step, setStep }}>
+    <BudgetContext.Provider value={{ basicData, setBasicData, step, setStep, constructionSteps, setConstructionSteps }}>
       {children}
     </BudgetContext.Provider>
   );

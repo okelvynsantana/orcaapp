@@ -1,7 +1,6 @@
 import {
   Button,
   Flex,
-  FormControl,
   Input,
   SimpleGrid,
   Text,
@@ -37,12 +36,12 @@ const PersonalDataForm: React.FC = () => {
     setInEdit(true);
   }, []);
 
-  const onSubmit = (values: IFormData, {}: FormikHelpers<IFormData>) => {
+  const onSubmit = useCallback((values: IFormData, {}: FormikHelpers<IFormData>) => {
+    setStep(2);
     setInEdit(false);
     setBasicData(values);
-    setStep(2);
     console.log({ basicData });
-  };
+  }, []);
   return (
     <Flex width="100%">
       <Formik
@@ -123,11 +122,7 @@ const PersonalDataForm: React.FC = () => {
                 type="button"
                 isDisabled={inEdit}
                 onClick={handleEdit}
-                color="#000"
-                bg="#c4c4c4"
-                _hover={{
-                  background: shade(0.2, "#c4c4c4"),
-                }}
+
               >
                 Editar
               </Button>

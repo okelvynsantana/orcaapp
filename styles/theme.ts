@@ -10,7 +10,6 @@ const global =  {
   }
 }
 
-
 const fonts = {
   default: "Poppins sans-serif",
   body: "Poppins, Helvetica, sans-serif"
