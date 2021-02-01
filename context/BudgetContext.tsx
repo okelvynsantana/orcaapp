@@ -13,8 +13,9 @@ interface IService {
   serviceCode: string;
   serviceDescription: string;
   und: string;
-  coef: string;
+  coef: number;
   qtd: number;
+  price: number;
 }
 
 interface IConstuctionStep {
