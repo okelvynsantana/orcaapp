@@ -1,31 +1,37 @@
-import { extendTheme } from "@chakra-ui/react"
+import { extendTheme } from '@chakra-ui/react'
 
-const global =  {
-  "*": {
+const global = {
+  '*': {
     padding: 0,
     marging: 0,
   },
-  "body": {
-    background: "#EEE",
-  }
+  body: {
+    background: '#EEE',
+  },
 }
 
 const fonts = {
-  default: "Poppins sans-serif",
-  body: "Poppins, Helvetica, sans-serif"
+  default: 'Poppins sans-serif',
+  body: 'Poppins, Helvetica, sans-serif',
 }
 
 const colors = {
   brand: {
-    primary: "#6F10BA"
-  }
+    primary: '#6F10BA',
+  },
 }
 const Input = {
   defaultProps: {
-    focusBorderColor: colors.brand.primary
-  }
+    focusBorderColor: colors.brand.primary,
+  },
 }
 
-export const theme = extendTheme({ components: {Input}, fonts, colors, styles: {
-  global,
-} })
+export const theme = extendTheme({
+  components: { Input },
+  fonts,
+  colors,
+
+  styles: {
+    global,
+  },
+})

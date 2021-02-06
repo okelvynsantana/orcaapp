@@ -1,8 +1,7 @@
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon } from '@chakra-ui/icons'
 import {
   Button,
   Flex,
-  Icon,
   Input,
   Modal,
   ModalBody,
@@ -17,34 +16,34 @@ import {
   Th,
   Thead,
   Tr,
-} from "@chakra-ui/react";
-import axios from "axios";
-import { useCallback, useState } from "react";
-import { useBudget } from "../context/BudgetContext";
+} from '@chakra-ui/react'
+import axios from 'axios'
+import { useCallback, useState } from 'react'
+// import { useBudget } from '../context/BudgetContext'
 
 interface RenderServicesModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean
+  onClose: () => void
 }
 
 const AddStepModal: React.FC<RenderServicesModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const { constructionSteps, setConstructionSteps } = useBudget();
-  const [searchService, setSearchService] = useState("");
-  const [resultServices, setResultServices] = useState([]);
-  const [stepName, setStepName] = useState("");
+  // const { constructionSteps, setConstructionSteps } = useBudget()
+  const [searchService, setSearchService] = useState('')
+  const [resultServices, setResultServices] = useState([])
+  const [stepName, setStepName] = useState('')
 
   const handleSearchServices = useCallback(async () => {
-    setResultServices([]);
+    setResultServices([])
     const result = await axios.get(
       `/api/SearchProducts?searchTerm=${searchService}`
-    );
-    setResultServices(result.data);
-    console.log(resultServices);
-    setSearchService("");
-  }, [searchService]);
+    )
+    setResultServices(result.data)
+    console.log(resultServices)
+    setSearchService('')
+  }, [searchService])
   return (
     <Modal
       isOpen={isOpen}
@@ -54,9 +53,11 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
       scrollBehavior="inside"
     >
       <ModalOverlay />
-      <ModalContent padding="30px" >
+      <ModalContent padding="30px">
         <ModalHeader border="red 1px solid" mt="10px">
-          <Text>{stepName ? `Etapa: ${stepName}` : "Adicionar nova etapa"}</Text>
+          <Text>
+            {stepName ? `Etapa: ${stepName}` : 'Adicionar nova etapa'}
+          </Text>
           <Button>Salvar</Button>
         </ModalHeader>
         <ModalCloseButton borderRadius="full" />
@@ -66,7 +67,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
               placeholder="Insira o nome da etapa"
               value={stepName}
               onChange={(e: any) => {
-                setStepName(e.target.value);
+                setStepName(e.target.value)
               }}
             />
           </Flex>
@@ -77,7 +78,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
             <Input
               placeholder="Digite o nome do serviço"
               value={searchService}
-              onChange={(e) => setSearchService(e.target.value)}
+              onChange={e => setSearchService(e.target.value)}
             />
             <Button
               background="brand.primary"
@@ -100,8 +101,8 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
               </Tr>
             </Thead>
             <Tbody>
-              {resultServices.map((result) => (
-                <Tr>
+              {resultServices.map(result => (
+                <Tr key={result.compositionCode}>
                   <Td>{result.compositionCode}</Td>
                   <Td maxW="100px" textOverflow="ellipsis" overflow="hidden">
                     {result.compositionDescription}
@@ -112,7 +113,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
                     <Input maxW="50px" type="number"></Input>
                   </Td>
                   <Td>
-                    <AddIcon ></AddIcon>
+                    <AddIcon></AddIcon>
                   </Td>
                 </Tr>
               ))}
@@ -121,7 +122,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
         </ModalBody>
       </ModalContent>
     </Modal>
-  );
-};
+  )
+}
 
-export default AddStepModal;
+export default AddStepModal

@@ -5,46 +5,46 @@ import {
   SimpleGrid,
   Text,
   useTheme,
-} from "@chakra-ui/react";
-import { Form, Formik, FormikHelpers } from "formik";
-import { shade } from "polished";
-import { useCallback, useState } from "react";
-import { useBudget } from "../context/BudgetContext";
+} from '@chakra-ui/react'
+import { Form, Formik, FormikHelpers } from 'formik'
+import { shade } from 'polished'
+import { useCallback, useState } from 'react'
+import { useBudget } from '../context/BudgetContext'
 
 interface IFormData {
-  constructionName: string;
-  proprietary: string;
-  address: string;
-  technicalManager: string;
-  bdi: number;
+  constructionName: string
+  proprietary: string
+  address: string
+  technicalManager: string
+  bdi: number
 }
 
 const PersonalDataForm: React.FC = () => {
-  const { setBasicData, basicData, setStep, step } = useBudget();
-  const theme = useTheme();
-  const [inEdit, setInEdit] = useState(true);
+  const { setBasicData, basicData, setStep } = useBudget()
+  const theme = useTheme()
+  const [inEdit, setInEdit] = useState(true)
 
   const formData: IFormData = {
-    constructionName: "",
-    proprietary: "",
-    address: "",
-    technicalManager: "",
+    constructionName: '',
+    proprietary: '',
+    address: '',
+    technicalManager: '',
     bdi: 0,
-  };
+  }
 
   const handleEdit = useCallback(() => {
-    setInEdit(true);
-  }, []);
+    setInEdit(true)
+  }, [])
 
   const onSubmit = useCallback(
-    (values: IFormData, {}: FormikHelpers<IFormData>) => {
-      setStep(2);
-      setInEdit(false);
-      setBasicData(values);
-      console.log({ basicData });
+    (values: IFormData, _: FormikHelpers<IFormData>) => {
+      setStep(2)
+      setInEdit(false)
+      setBasicData(values)
+      console.log({ basicData })
     },
     []
-  );
+  )
   return (
     <Flex width="100%">
       <Formik
@@ -139,7 +139,7 @@ const PersonalDataForm: React.FC = () => {
         )}
       />
     </Flex>
-  );
-};
+  )
+}
 
-export default PersonalDataForm;
+export default PersonalDataForm

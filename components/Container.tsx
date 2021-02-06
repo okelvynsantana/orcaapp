@@ -1,7 +1,6 @@
-import { useBudget } from "../context/BudgetContext";
-import CardBody from "./cardBody";
-import PersonalDataForm from "./PersonalDataForm";
-import ServicesForm from "./servicesForm";
+import CardBody from './cardBody'
+import PersonalDataForm from './PersonalDataForm'
+import ServicesForm from './servicesForm'
 
 const FormContainer: React.FC = () => {
   return (
@@ -9,7 +8,7 @@ const FormContainer: React.FC = () => {
       <PersonalDataForm />
       <ServicesForm />
     </CardBody>
-  );
-};
+  )
+}
 
-export default FormContainer;
+export default FormContainer

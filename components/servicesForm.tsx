@@ -1,24 +1,10 @@
-import {
-  Button,
-  Flex,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import AddStepModal from "./AddStepModal";
-import ConstructionStep from "./ConstructionStep";
-
-
-
+import { Button, Flex, Text } from '@chakra-ui/react'
+import { useState } from 'react'
+import AddStepModal from './AddStepModal'
+import ConstructionStep from './ConstructionStep'
 
 const ServicesForm: React.FC = () => {
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false)
 
   return (
     <Flex width="100%" mt="40px" flexDir="column">
@@ -26,7 +12,7 @@ const ServicesForm: React.FC = () => {
         <Text fontSize="24px">Etapas da obra</Text>
         <Button
           onClick={() => {
-            setOpenModal(true);
+            setOpenModal(true)
           }}
         >
           Nova Etapa
@@ -34,7 +20,7 @@ const ServicesForm: React.FC = () => {
         <AddStepModal
           isOpen={openModal}
           onClose={() => {
-            setOpenModal(false);
+            setOpenModal(false)
           }}
         />
       </Flex>
@@ -43,16 +29,16 @@ const ServicesForm: React.FC = () => {
         stepName="Terraplanagem"
         services={[
           {
-            serviceCode: "123",
-            coef: "1",
+            serviceCode: '123',
+            coef: '1',
             qtd: 2,
-            serviceDescription: "to nem ai",
-            und: "KG",
+            serviceDescription: 'to nem ai',
+            und: 'KG',
           },
         ]}
       />
     </Flex>
-  );
-};
+  )
+}
 
-export default ServicesForm;
+export default ServicesForm

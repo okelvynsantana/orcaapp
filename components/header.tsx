@@ -1,4 +1,4 @@
-import { Flex, Image, Link } from "@chakra-ui/react";
+import { Flex, Image, Link } from '@chakra-ui/react'
 
 const CustomHeader: React.FC = () => {
   return (
@@ -7,7 +7,7 @@ const CustomHeader: React.FC = () => {
         <Image src="logo.svg" marginLeft="10px" />
       </Link>
     </Flex>
-  );
-};
+  )
+}
 
-export default CustomHeader;
+export default CustomHeader
