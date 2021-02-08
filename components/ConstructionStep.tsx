@@ -1,5 +1,5 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Flex, Tag, Tooltip, useCallbackRef, useToast } from '@chakra-ui/react'
+import { Flex, Tag, Tooltip, useToast } from '@chakra-ui/react'
 import { useCallback } from 'react'
 import { useBudget } from '../context/BudgetContext'
 
@@ -7,8 +7,9 @@ interface IService {
   serviceCode: string
   serviceDescription: string
   und: string
-  coef: string
+  coef: number
   qtd: number
+  price: number
 }
 
 interface ConstructionStepProps {
