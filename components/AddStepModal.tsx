@@ -3,6 +3,7 @@ import {
   Button,
   Flex,
   Input,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -17,35 +18,36 @@ import {
   Th,
   Thead,
   Tr,
+  useTheme,
+  useToast,
 } from '@chakra-ui/react'
 import axios from 'axios'
+import { shade } from 'polished'
 import { useCallback, useState } from 'react'
-// import { useBudget } from '../context/BudgetContext'
+import { useBudget } from '../context/BudgetContext'
 
 interface RenderServicesModalProps {
-  isOpen: boolean
+  onOpen: () => void
   onClose: () => void
+  isOpen: boolean
 }
 
 const AddStepModal: React.FC<RenderServicesModalProps> = ({
-  isOpen,
   onClose,
+  isOpen,
 }) => {
-  // const { constructionSteps, setConstructionSteps } = useBudget()
+  const { constructionSteps, setConstructionSteps } = useBudget()
   const [searchService, setSearchService] = useState('')
   const [resultServices, setResultServices] = useState([])
   const [stepName, setStepName] = useState('')
   const [loading, setLoading] = useState(false)
+  const toast = useToast()
+  const theme = useTheme()
+  // const { isOpen, onClose } = useDisclosure()
 
-  // const handleSearchServices = useCallback(async () => {
-  //   setResultServices([])
-  //   const result = await search(
-  //     `/api/SearchProducts?searchTerm=${searchService}`
-  //   )
-  //   setResultServices(result.data)
-  //   console.log(resultServices)
-  //   setSearchService('')
-  // }, [searchService])
+  const onCloseModal = () => {
+    onClose()
+  }
 
   const RenderTable = () => {
     return (
@@ -53,36 +55,52 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
         {!resultServices.length ? (
           <RenderEmptyContent />
         ) : (
-          <Table variant="simple" flexDir="row" marginTop="25px">
-            <Thead>
-              <Tr>
-                <Th>Código</Th>
-                <Th>Serviço</Th>
-                <Th>UND</Th>
-                <Th>COEF</Th>
-                <Th>QTD</Th>
-                <Th>Preço Unitário</Th>
-                <Th>Preço total</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {resultServices.map(result => (
-                <Tr key={result.compositionCode}>
-                  <Td>{result.compositionCode}</Td>
-                  <Td maxW="100px" textOverflow="ellipsis" overflow="hidden">
-                    {result.compositionDescription}
-                  </Td>
-                  <Td>UND</Td>
-                  <Td>COEF</Td>
-                  <Td>
-                    <Input maxW="50px" type="number"></Input>
-                  </Td>
-                  <Td>1</Td>
-                  <Td>2</Td>
+          <>
+            <Flex w="100%" justifyContent="flex-end" color="#AAA">
+              <Text mt="20px" alignSelf="flex-end">
+                Dados extraídos da planilha{' '}
+                <Link
+                  target="_blank"
+                  href="https://www.caixa.gov.br/Downloads/sinapi-a-partir-jul-2009-mg/SINAPI_ref_Insumos_Composicoes_MG_122020_NaoDesonerado.zip"
+                >
+                  SINAPI_ref_Insumos_Composicoes_MG_122020_NaoDesonerado
+                </Link>
+              </Text>
+            </Flex>
+            <Table variant="simple" flexDir="row" marginTop="25px">
+              <Thead>
+                <Tr>
+                  <Th>Código</Th>
+                  <Th>Serviço</Th>
+                  <Th>UND</Th>
+                  <Th>COEF</Th>
+                  <Th>QTD</Th>
+                  <Th>Preço Unitário</Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
+              </Thead>
+              <Tbody>
+                {resultServices.map(result => (
+                  <Tr key={result.compositionCode}>
+                    <Td>{result.compositionCode}</Td>
+                    <Td maxW="100px" textOverflow="ellipsis" overflow="hidden">
+                      {result.compositionDescription}
+                    </Td>
+                    <Td>{result.und}</Td>
+                    <Td>{result.coef}</Td>
+                    <Td>
+                      <Input maxW="50px" type="number"></Input>
+                    </Td>
+                    <Td>
+                      {new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      }).format(result.price)}
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </>
         )}
       </>
     )
@@ -94,10 +112,12 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
         flexDir="column"
         alignItems="center"
         justifyContent="center"
-        mt="40px"
+        mt="100px"
       >
-        <Spinner />
-        <Text>Carregando...</Text>
+        <Spinner color="#AAA" size="xl" />
+        <Text color="#AAA" fontSize="24px">
+          Carregando ...
+        </Text>
       </Flex>
     )
   }
@@ -107,15 +127,16 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
         flexDir="column"
         alignItems="center"
         justifyContent="center"
-        mt="40px"
+        mt="100px"
       >
-        <Text>
-          Não há resultados para o termo pesquisado, tente com outro termo
+        <Text color="#AAA" fontSize="24px">
+          {searchService.length
+            ? 'Não há resultados para o termo pesquisado, tente com outro termo'
+            : 'Digite algo para Pesquisar'}
         </Text>
       </Flex>
     )
   }
-
   const onChangeHandler = useCallback(async (e: any) => {
     setLoading(true)
     setSearchService(e.target.value)
@@ -125,11 +146,31 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
     setResultServices(result.data)
     setLoading(false)
   }, [])
-  const handleAddNewStep = useCallback(() => {}, [])
+  const handleAddNewStep = useCallback(() => {
+    setConstructionSteps([
+      ...constructionSteps,
+      {
+        stepName: stepName,
+        services: [],
+      },
+    ])
+    setStepName('')
+    setSearchService('')
+    setResultServices([])
+    onCloseModal()
+    toast({
+      title: 'Sucesso!',
+      description: 'Etapa adicionada com sucesso',
+      isClosable: true,
+      status: 'success',
+      duration: 3000,
+      position: 'bottom-right',
+    })
+  }, [stepName])
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={onCloseModal}
       size="full"
       motionPreset="scale"
       scrollBehavior="inside"
@@ -141,7 +182,15 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
             <Text>
               {stepName ? `Etapa: ${stepName}` : 'Adicionar nova etapa'}
             </Text>
-            <Button onClick={handleAddNewStep}>Salvar Etapa</Button>
+            <Button
+              background="brand.primary"
+              color="#FFF"
+              _hover={{ background: shade(0.2, theme.colors.brand.primary) }}
+              transition="brackground, 0.2s"
+              onClick={handleAddNewStep}
+            >
+              Salvar Etapa
+            </Button>
           </Flex>
         </ModalHeader>
         <ModalCloseButton borderRadius="full" />
@@ -164,15 +213,6 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
               value={searchService}
               onChange={e => onChangeHandler(e)}
             />
-
-            {/* <Button
-              background="brand.primary"
-              color="#FFF"
-              ml="10px"
-              onClick={handleSearchServices}
-            >
-              Buscar
-            </Button> */}
           </Flex>
           {loading ? <RenderLoading /> : <RenderTable />}
         </ModalBody>

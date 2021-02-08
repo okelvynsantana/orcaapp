@@ -38,7 +38,7 @@ export default async (
   }
 
   const db = await connectToDatabase(process.env.MONGO_URI)
-  const collection = db.collection('compositions')
+  const collection = db.collection('sinapi-mg')
   collection.createIndex({ compositionDescription: 'text' })
 
   const compositions = await collection
