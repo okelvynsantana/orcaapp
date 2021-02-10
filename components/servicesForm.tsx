@@ -25,7 +25,6 @@ const ServicesForm: React.FC = () => {
         </Button>
         <AddStepModal onOpen={onOpen} onClose={onClose} isOpen={isOpen} />
       </Flex>
-      {/* TODO: fazer map para cada contructionStep */}
       {constructionSteps.map(c => (
         <ConstructionStep
           key={c.stepName}

@@ -9,17 +9,27 @@ interface IBasicData {
 }
 
 interface IService {
-  serviceCode: string
-  serviceDescription: string
+  itemCode: string
+  itemDescription: string
   und: string
   coef: number
-  qtd: number
   price: number
+}
+
+interface IComposition {
+  _id: string
+  compositionCode: string
+  compositionDescription: string
+  coef: number
+  price: number
+  und: string
+  qtd: number
+  items: IService[]
 }
 
 interface IConstuctionStep {
   stepName: string
-  services: IService[]
+  services: IComposition[]
 }
 
 interface IBudgetData {

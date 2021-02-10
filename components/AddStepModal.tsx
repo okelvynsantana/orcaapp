@@ -1,4 +1,4 @@
-// import { AddIcon } from '@chakra-ui/icons'
+import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 import {
   Button,
   Flex,
@@ -31,7 +31,23 @@ interface RenderServicesModalProps {
   onClose: () => void
   isOpen: boolean
 }
+interface IItems {
+  itemCode: string
+  itemDescription: string
+  und: string
+  coef: number
+  price: number
+}
 
+interface IComposition {
+  _id: string
+  compositionCode: string
+  coef: number
+  price: number
+  und: string
+  // qtd: number
+  items: IItems[]
+}
 const AddStepModal: React.FC<RenderServicesModalProps> = ({
   onClose,
   isOpen,
@@ -41,13 +57,60 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
   const [resultServices, setResultServices] = useState([])
   const [stepName, setStepName] = useState('')
   const [loading, setLoading] = useState(false)
+  const [compositions, setCompositions] = useState([])
   const toast = useToast()
   const theme = useTheme()
-  // const { isOpen, onClose } = useDisclosure()
 
   const onCloseModal = () => {
     onClose()
   }
+
+  const getQuantity = (compositionCode: string) => {
+    const existInCompositions = compositions.find(
+      c => c._id === compositionCode
+    )
+    if (!existInCompositions) {
+      return 0
+    }
+
+    return existInCompositions.qtd
+  }
+  const handleAddCompositionToStep = useCallback(
+    (composition: IComposition) => {
+      const compositionsValue = [...compositions]
+      const compositionIndex = compositionsValue.findIndex(
+        c => c._id === composition._id
+      )
+
+      if (compositionIndex < 0) {
+        compositionsValue.push({ ...composition, qtd: 1 })
+        setCompositions(compositionsValue)
+      } else {
+        compositionsValue[compositionIndex].qtd =
+          compositionsValue[compositionIndex].qtd + 1
+
+        setCompositions(compositionsValue)
+      }
+    },
+    [compositions]
+  )
+
+  const handleDecrementCompositionToStep = useCallback(
+    (composition: IComposition) => {
+      const compositionsValue = [...compositions]
+      const compositionIndex = compositionsValue.findIndex(
+        c => c._id === composition._id
+      )
+
+      if (compositionIndex >= 0) {
+        compositionsValue[compositionIndex].qtd =
+          compositionsValue[compositionIndex].qtd - 1
+
+        setCompositions(compositionsValue)
+      }
+    },
+    [compositions]
+  )
 
   const RenderTable = () => {
     return (
@@ -73,14 +136,15 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
                   <Th>Código</Th>
                   <Th>Serviço</Th>
                   <Th>UND</Th>
-                  <Th>COEF</Th>
-                  <Th>QTD</Th>
+                  <Th>Coef</Th>
                   <Th>Preço Unitário</Th>
+                  <Th>QTD</Th>
+                  <Th>Ações</Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {resultServices.map(result => (
-                  <Tr key={result.compositionCode}>
+                  <Tr key={result._id}>
                     <Td>{result.compositionCode}</Td>
                     <Td maxW="100px" textOverflow="ellipsis" overflow="hidden">
                       {result.compositionDescription}
@@ -88,13 +152,40 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
                     <Td>{result.und}</Td>
                     <Td>{result.coef}</Td>
                     <Td>
-                      <Input maxW="50px" type="number"></Input>
-                    </Td>
-                    <Td>
                       {new Intl.NumberFormat('pt-BR', {
                         style: 'currency',
                         currency: 'BRL',
                       }).format(result.price)}
+                    </Td>
+                    <Td>{getQuantity(result._id)}</Td>
+                    <Td>
+                      <Button
+                        borderRadius="full"
+                        // background="brand.primary"
+                        // _hover={{
+                        //   background: shade(0.2, theme.colors.brand.primary),
+                        // }}
+                        transition="background 0.5s"
+                        onClick={() => {
+                          handleDecrementCompositionToStep(result)
+                        }}
+                      >
+                        <MinusIcon />
+                      </Button>
+                      <Button
+                        ml="10px"
+                        borderRadius="full"
+                        background="brand.primary"
+                        _hover={{
+                          background: shade(0.2, theme.colors.brand.primary),
+                        }}
+                        transition="background 0.5s"
+                        onClick={() => {
+                          handleAddCompositionToStep(result)
+                        }}
+                      >
+                        <AddIcon color="#FFF" />
+                      </Button>
                     </Td>
                   </Tr>
                 ))}
@@ -140,20 +231,23 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
   const onChangeHandler = useCallback(async (e: any) => {
     setLoading(true)
     setSearchService(e.target.value)
-    const result = await axios.get(
-      `/api/SearchProducts?searchTerm=${e.target.value}`
-    )
-    setResultServices(result.data)
+    setTimeout(async () => {
+      const result = await axios.get(
+        `/api/SearchProducts?searchTerm=${e.target.value}`
+      )
+      setResultServices(result.data)
+    }, 100)
+    console.log(resultServices)
     setLoading(false)
   }, [])
   const handleAddNewStep = useCallback(() => {
-    setConstructionSteps([
-      ...constructionSteps,
-      {
-        stepName: stepName,
-        services: [],
-      },
-    ])
+    const constructionStepsValue = [...constructionSteps]
+
+    constructionStepsValue.push({
+      stepName: stepName,
+      services: compositions,
+    })
+    setConstructionSteps(constructionStepsValue)
     setStepName('')
     setSearchService('')
     setResultServices([])
@@ -166,7 +260,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
       duration: 3000,
       position: 'bottom-right',
     })
-  }, [stepName])
+  }, [stepName, compositions])
   return (
     <Modal
       isOpen={isOpen}
