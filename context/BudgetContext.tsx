@@ -14,6 +14,10 @@ interface IService {
   und: string
   coef: number
   price: number
+  qtd: number
+  unitCoast: number
+  directCoast: number
+  finalPrice: number
 }
 
 interface IComposition {
@@ -24,6 +28,9 @@ interface IComposition {
   price: number
   und: string
   qtd: number
+  unitCoast: number
+  directCoast: number
+  finalPrice: number
   items: IService[]
 }
 

@@ -20,7 +20,7 @@ interface IFormData {
 }
 
 const PersonalDataForm: React.FC = () => {
-  const { setBasicData, basicData, setStep } = useBudget()
+  const { setBasicData, setStep } = useBudget()
   const theme = useTheme()
   const [inEdit, setInEdit] = useState(true)
 
@@ -41,7 +41,6 @@ const PersonalDataForm: React.FC = () => {
       setStep(2)
       setInEdit(false)
       setBasicData(values)
-      console.log({ basicData })
     },
     []
   )

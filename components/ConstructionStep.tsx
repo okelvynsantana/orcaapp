@@ -20,6 +20,10 @@ interface IService {
   und: string
   coef: number
   price: number
+  qtd: number
+  unitCoast: number
+  directCoast: number
+  finalPrice: number
 }
 interface IComposition {
   _id: string
@@ -29,6 +33,9 @@ interface IComposition {
   price: number
   und: string
   qtd: number
+  unitCoast: number
+  directCoast: number
+  finalPrice: number
   items: IService[]
 }
 interface ConstructionStepProps {
@@ -95,23 +102,44 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
               <Th>UND</Th>
               <Th>QTD</Th>
               <Th>Coeficiente</Th>
-              <Th>Preço</Th>
+              <Th>Custo Unitário</Th>
+              <Th>Custo Direto</Th>
+              <Th>Preço Unitário</Th>
+              <Th>Preço de venda</Th>
             </Tr>
           </Thead>
           <Tbody>
             {services.map(s => (
               <>
-                <Tr key={s._id} fontWeight="bold">
+                <Tr key={s._id} fontWeight="bold" background="#EEE">
                   <Td>{s.compositionCode}</Td>
                   <Td>{s.compositionDescription}</Td>
                   <Td>{s.und}</Td>
                   <Td>{s.qtd}</Td>
                   <Td>{s.coef}</Td>
                   <Td>
-                    {new Intl.NumberFormat('pt-BR', {
-                      style: 'currency',
+                    {s.unitCoast.toLocaleString('pt-BR', {
                       currency: 'BRL',
-                    }).format(s.price)}
+                      style: 'currency',
+                    })}
+                  </Td>
+                  <Td>
+                    {s.directCoast.toLocaleString('pt-BR', {
+                      currency: 'BRL',
+                      style: 'currency',
+                    })}
+                  </Td>
+                  <Td>
+                    {s.price.toLocaleString('pt-BR', {
+                      currency: 'BRL',
+                      style: 'currency',
+                    })}
+                  </Td>
+                  <Td>
+                    {s.finalPrice.toLocaleString('pt-BR', {
+                      currency: 'BRL',
+                      style: 'currency',
+                    })}
                   </Td>
                 </Tr>
                 {s.items.map(item => (
@@ -119,13 +147,31 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
                     <Td>{item.itemCode}</Td>
                     <Td>{item.itemDescription}</Td>
                     <Td>{item.und}</Td>
-                    <Td>{s.qtd}</Td>
+                    <Td>{item.qtd}</Td>
                     <Td>{item.coef}</Td>
                     <Td>
-                      {new Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
+                      {item.unitCoast.toLocaleString('pt-BR', {
                         currency: 'BRL',
-                      }).format(item.price)}
+                        style: 'currency',
+                      })}
+                    </Td>
+                    <Td>
+                      {item.directCoast.toLocaleString('pt-BR', {
+                        currency: 'BRL',
+                        style: 'currency',
+                      })}
+                    </Td>
+                    <Td>
+                      {item.price.toLocaleString('pt-BR', {
+                        currency: 'BRL',
+                        style: 'currency',
+                      })}
+                    </Td>
+                    <Td>
+                      {item.finalPrice.toLocaleString('pt-BR', {
+                        currency: 'BRL',
+                        style: 'currency',
+                      })}
                     </Td>
                   </Tr>
                 ))}

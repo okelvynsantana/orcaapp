@@ -52,7 +52,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
   onClose,
   isOpen,
 }) => {
-  const { constructionSteps, setConstructionSteps } = useBudget()
+  const { constructionSteps, setConstructionSteps, basicData } = useBudget()
   const [searchService, setSearchService] = useState('')
   const [resultServices, setResultServices] = useState([])
   const [stepName, setStepName] = useState('')
@@ -63,6 +63,8 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
 
   const onCloseModal = () => {
     onClose()
+    setSearchService('')
+    setCompositions([])
   }
 
   const getQuantity = (compositionCode: string) => {
@@ -73,7 +75,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
       return 0
     }
 
-    return existInCompositions.qtd
+    return existInCompositions.qtd * existInCompositions.coef
   }
   const handleAddCompositionToStep = useCallback(
     (composition: IComposition) => {
@@ -111,6 +113,72 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
     },
     [compositions]
   )
+
+  const onChangeHandler = useCallback(async (e: any) => {
+    setLoading(true)
+    setSearchService(e.target.value)
+    setTimeout(async () => {
+      const result = await axios.get(
+        `/api/SearchProducts?searchTerm=${e.target.value}`
+      )
+      setResultServices(result.data)
+      setLoading(false)
+    }, 100)
+  }, [])
+
+  const getServices = () => {
+    const compositionsValue = [...compositions]
+
+    const newCompositions = compositionsValue.map(c => {
+      const compositionDirectCoast = c.price * c.qtd
+      return {
+        ...c,
+        unitCoast: c.price * c.coef,
+        directCoast: compositionDirectCoast,
+        finalPrice: compositionDirectCoast * (1 + basicData.bdi),
+        items: c.items.map(i => {
+          const itemQtd = c.qtd * i.coef
+          console.log({ price: i.price, qtd: itemQtd })
+          const itemDirectCoast = i.price * itemQtd
+
+          return {
+            ...i,
+            qtd: itemQtd,
+            unitCoast: i.price * i.coef,
+            directCoast: itemDirectCoast,
+            finalPrice: itemDirectCoast * (1 + basicData.bdi),
+          }
+        }),
+      }
+    })
+
+    console.log(newCompositions)
+
+    return newCompositions
+  }
+
+  const handleAddNewStep = useCallback(() => {
+    const constructionStepsValue = [...constructionSteps]
+
+    constructionStepsValue.push({
+      stepName: stepName,
+      services: getServices(),
+    })
+    setConstructionSteps(constructionStepsValue)
+    setStepName('')
+    setSearchService('')
+    setResultServices([])
+    setCompositions([])
+    onCloseModal()
+    toast({
+      title: 'Sucesso!',
+      description: 'Etapa adicionada com sucesso',
+      isClosable: true,
+      status: 'success',
+      duration: 3000,
+      position: 'bottom-right',
+    })
+  }, [stepName, compositions])
 
   const RenderTable = () => {
     return (
@@ -228,39 +296,6 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
       </Flex>
     )
   }
-  const onChangeHandler = useCallback(async (e: any) => {
-    setLoading(true)
-    setSearchService(e.target.value)
-    setTimeout(async () => {
-      const result = await axios.get(
-        `/api/SearchProducts?searchTerm=${e.target.value}`
-      )
-      setResultServices(result.data)
-    }, 100)
-    console.log(resultServices)
-    setLoading(false)
-  }, [])
-  const handleAddNewStep = useCallback(() => {
-    const constructionStepsValue = [...constructionSteps]
-
-    constructionStepsValue.push({
-      stepName: stepName,
-      services: compositions,
-    })
-    setConstructionSteps(constructionStepsValue)
-    setStepName('')
-    setSearchService('')
-    setResultServices([])
-    onCloseModal()
-    toast({
-      title: 'Sucesso!',
-      description: 'Etapa adicionada com sucesso',
-      isClosable: true,
-      status: 'success',
-      duration: 3000,
-      position: 'bottom-right',
-    })
-  }, [stepName, compositions])
   return (
     <Modal
       isOpen={isOpen}

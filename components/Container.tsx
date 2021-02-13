@@ -1,12 +1,14 @@
+import { useBudget } from '../context/BudgetContext'
 import CardBody from './cardBody'
 import PersonalDataForm from './PersonalDataForm'
 import ServicesForm from './servicesForm'
 
 const FormContainer: React.FC = () => {
+  const { step } = useBudget()
   return (
     <CardBody>
       <PersonalDataForm />
-      <ServicesForm />
+      {step > 1 && <ServicesForm />}
     </CardBody>
   )
 }
