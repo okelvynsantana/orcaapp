@@ -1,4 +1,4 @@
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
+import { DeleteIcon } from '@chakra-ui/icons'
 import {
   Flex,
   Table,
