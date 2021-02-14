@@ -29,7 +29,7 @@ const PersonalDataForm: React.FC = () => {
     proprietary: '',
     address: '',
     technicalManager: '',
-    bdi: 0,
+    bdi: '0',
   }
 
   const handleEdit = useCallback(() => {
