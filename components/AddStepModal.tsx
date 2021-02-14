@@ -1,4 +1,4 @@
-import { AddIcon, MinusIcon } from '@chakra-ui/icons'
+import { DeleteIcon } from '@chakra-ui/icons'
 import {
   Button,
   Flex,
@@ -23,7 +23,7 @@ import {
 } from '@chakra-ui/react'
 import axios from 'axios'
 import { shade } from 'polished'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useBudget } from '../context/BudgetContext'
 
 interface RenderServicesModalProps {
@@ -65,51 +65,58 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
     onClose()
     setSearchService('')
     setCompositions([])
+    setLoading(false)
   }
 
-  const getQuantity = (compositionCode: string) => {
-    const existInCompositions = compositions.find(
-      c => c._id === compositionCode
-    )
-    if (!existInCompositions) {
-      return 0
-    }
+  const getQuantity = useCallback(
+    (compositionCode: string) => {
+      const compositionIndex = compositions.findIndex(
+        c => c._id === compositionCode
+      )
+      if (compositionIndex < 0) {
+        return 0
+      }
 
-    return existInCompositions.qtd * existInCompositions.coef
-  }
+      return compositions[compositionIndex].qtd
+    },
+    [compositions]
+  )
+
   const handleAddCompositionToStep = useCallback(
-    (composition: IComposition) => {
+    (composition: IComposition, qtd: number) => {
       const compositionsValue = [...compositions]
       const compositionIndex = compositionsValue.findIndex(
         c => c._id === composition._id
       )
 
-      if (compositionIndex < 0) {
-        compositionsValue.push({ ...composition, qtd: 1 })
-        setCompositions(compositionsValue)
+      if (qtd === 0) {
+        const clearComposition = compositionsValue.filter(
+          c => composition._id !== c._id
+        )
+        setCompositions(clearComposition)
       } else {
-        compositionsValue[compositionIndex].qtd =
-          compositionsValue[compositionIndex].qtd + 1
+        if (compositionIndex < 0) {
+          compositionsValue.push({ ...composition, qtd })
+          setCompositions(compositionsValue)
+        } else {
+          compositionsValue[compositionIndex].qtd = qtd
 
-        setCompositions(compositionsValue)
+          setCompositions(compositionsValue)
+        }
       }
     },
     [compositions]
   )
 
   const handleDecrementCompositionToStep = useCallback(
-    (composition: IComposition) => {
+    (compositionId: string) => {
       const compositionsValue = [...compositions]
-      const compositionIndex = compositionsValue.findIndex(
-        c => c._id === composition._id
+
+      const newCompositions = compositionsValue.filter(
+        c => c._id !== compositionId
       )
 
-      if (compositionIndex >= 0) {
-        compositionsValue[compositionIndex].qtd =
-          compositionsValue[compositionIndex].qtd - 1
-
-        setCompositions(compositionsValue)
-      }
+      setCompositions(newCompositions)
     },
     [compositions]
   )
@@ -198,67 +205,66 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
                 </Link>
               </Text>
             </Flex>
-            <Table variant="simple" flexDir="row" marginTop="25px">
-              <Thead>
-                <Tr>
-                  <Th>Código</Th>
-                  <Th>Serviço</Th>
-                  <Th>UND</Th>
-                  <Th>Coef</Th>
-                  <Th>Preço Unitário</Th>
-                  <Th>QTD</Th>
-                  <Th>Ações</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {resultServices.map(result => (
-                  <Tr key={result._id}>
-                    <Td>{result.compositionCode}</Td>
-                    <Td maxW="100px" textOverflow="ellipsis" overflow="hidden">
-                      {result.compositionDescription}
-                    </Td>
-                    <Td>{result.und}</Td>
-                    <Td>{result.coef}</Td>
-                    <Td>
-                      {new Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                      }).format(result.price)}
-                    </Td>
-                    <Td>{getQuantity(result._id)}</Td>
-                    <Td>
-                      <Button
-                        borderRadius="full"
-                        // background="brand.primary"
-                        // _hover={{
-                        //   background: shade(0.2, theme.colors.brand.primary),
-                        // }}
-                        transition="background 0.5s"
-                        onClick={() => {
-                          handleDecrementCompositionToStep(result)
-                        }}
-                      >
-                        <MinusIcon />
-                      </Button>
-                      <Button
-                        ml="10px"
-                        borderRadius="full"
-                        background="brand.primary"
-                        _hover={{
-                          background: shade(0.2, theme.colors.brand.primary),
-                        }}
-                        transition="background 0.5s"
-                        onClick={() => {
-                          handleAddCompositionToStep(result)
-                        }}
-                      >
-                        <AddIcon color="#FFF" />
-                      </Button>
-                    </Td>
+            <Flex>
+              <Table variant="simple" flexDir="row" marginTop="25px">
+                <Thead>
+                  <Tr>
+                    <Th>Código</Th>
+                    <Th>Serviço</Th>
+                    <Th>UND</Th>
+                    <Th>Coef</Th>
+                    <Th>Preço Unitário</Th>
+                    <Th>QTD</Th>
+                    <Th>Ações</Th>
                   </Tr>
-                ))}
-              </Tbody>
-            </Table>
+                </Thead>
+                <Tbody>
+                  {resultServices.map(result => (
+                    <Tr key={result._id}>
+                      <Td>{result.compositionCode}</Td>
+                      <Td
+                        maxW="100px"
+                        textOverflow="ellipsis"
+                        overflow="hidden"
+                      >
+                        {result.compositionDescription}
+                      </Td>
+                      <Td>{result.und}</Td>
+                      <Td>{result.coef}</Td>
+                      <Td>
+                        {new Intl.NumberFormat('pt-BR', {
+                          style: 'currency',
+                          currency: 'BRL',
+                        }).format(result.price)}
+                      </Td>
+                      <Td maxW="10px">
+                        <Input
+                          value={getQuantity(result._id)}
+                          onChange={e => {
+                            handleAddCompositionToStep(
+                              result,
+                              parseInt(e.target.value)
+                            )
+                          }}
+                          type="number"
+                        />
+                      </Td>
+                      <Td>
+                        <Button
+                          borderRadius="full"
+                          transition="background 0.5s"
+                          onClick={() => {
+                            handleDecrementCompositionToStep(result._id)
+                          }}
+                        >
+                          <DeleteIcon color="#FF0023" />
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </Flex>
           </>
         )}
       </>
@@ -343,7 +349,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
               onChange={e => onChangeHandler(e)}
             />
           </Flex>
-          {loading ? <RenderLoading /> : <RenderTable />}
+          {loading ? RenderLoading() : RenderTable()}
         </ModalBody>
       </ModalContent>
     </Modal>

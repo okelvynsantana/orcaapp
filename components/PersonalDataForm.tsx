@@ -16,7 +16,7 @@ interface IFormData {
   proprietary: string
   address: string
   technicalManager: string
-  bdi: number
+  bdi: string
 }
 
 const PersonalDataForm: React.FC = () => {
@@ -40,7 +40,7 @@ const PersonalDataForm: React.FC = () => {
     (values: IFormData, _: FormikHelpers<IFormData>) => {
       setStep(2)
       setInEdit(false)
-      setBasicData(values)
+      setBasicData({ ...values, bdi: parseFloat(values.bdi.replace(',', '.')) })
     },
     []
   )
@@ -109,9 +109,9 @@ const PersonalDataForm: React.FC = () => {
                   <Input
                     disabled={!inEdit}
                     name="bdi"
+                    lang="pt-BR"
                     value={values.bdi}
                     onChange={handleChange}
-                    type="number"
                   />
                 </Flex>
               </SimpleGrid>

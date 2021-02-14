@@ -98,10 +98,10 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
           <Thead>
             <Tr>
               <Th>Código SINAPI</Th>
-              <Th>Descrição</Th>
+              <Th maxW="20px">Descrição</Th>
               <Th>UND</Th>
               <Th>QTD</Th>
-              <Th>Coeficiente</Th>
+              <Th>Coef.</Th>
               <Th>Custo Unitário</Th>
               <Th>Custo Direto</Th>
               <Th>Preço Unitário</Th>
@@ -113,10 +113,18 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
               <>
                 <Tr key={s._id} fontWeight="bold" background="#EEE">
                   <Td>{s.compositionCode}</Td>
-                  <Td>{s.compositionDescription}</Td>
+                  <Td maxW="10px">{s.compositionDescription}</Td>
                   <Td>{s.und}</Td>
-                  <Td>{s.qtd}</Td>
-                  <Td>{s.coef}</Td>
+                  <Td>
+                    {s.qtd.toLocaleString('pt-BR', {
+                      maximumFractionDigits: 2,
+                    })}
+                  </Td>
+                  <Td>
+                    {s.coef.toLocaleString('pt-BR', {
+                      maximumFractionDigits: 2,
+                    })}
+                  </Td>
                   <Td>
                     {s.unitCoast.toLocaleString('pt-BR', {
                       currency: 'BRL',
@@ -147,8 +155,16 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
                     <Td>{item.itemCode}</Td>
                     <Td>{item.itemDescription}</Td>
                     <Td>{item.und}</Td>
-                    <Td>{item.qtd}</Td>
-                    <Td>{item.coef}</Td>
+                    <Td>
+                      {item.qtd.toLocaleString('pt-BR', {
+                        maximumFractionDigits: 2,
+                      })}
+                    </Td>
+                    <Td>
+                      {item.coef.toLocaleString('pt-BR', {
+                        maximumFractionDigits: 2,
+                      })}
+                    </Td>
                     <Td>
                       {item.unitCoast.toLocaleString('pt-BR', {
                         currency: 'BRL',
