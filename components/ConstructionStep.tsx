@@ -75,9 +75,9 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
             {stepName}
           </Tag>
           <Flex>
-            <Tooltip hasArrow label="Editar etapa">
+            {/* <Tooltip hasArrow label="Editar etapa">
               <EditIcon w={6} h={6} cursor="pointer" />
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip hasArrow label="Deletar Etapa" bg="red.600">
               <DeleteIcon
                 _hover={{ color: 'red.700' }}
@@ -93,7 +93,7 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
           </Flex>
         </Flex>
       </Flex>
-      <Flex mt="25px">
+      <Flex mt="25px" flexDir="column">
         <Table>
           <Thead>
             <Tr>
@@ -113,7 +113,9 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
               <>
                 <Tr key={s._id} fontWeight="bold" background="#EEE">
                   <Td>{s.compositionCode}</Td>
-                  <Td maxW="10px">{s.compositionDescription}</Td>
+                  <Td maxW="100px" textOverflow="ellipsis" overflow="hidden">
+                    {s.compositionDescription}
+                  </Td>
                   <Td>{s.und}</Td>
                   <Td>
                     {s.qtd.toLocaleString('pt-BR', {
@@ -153,7 +155,9 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
                 {s.items.map(item => (
                   <Tr key={item.itemCode}>
                     <Td>{item.itemCode}</Td>
-                    <Td>{item.itemDescription}</Td>
+                    <Td maxW="200px" textOverflow="ellipsis" overflow="hidden">
+                      {item.itemDescription}
+                    </Td>
                     <Td>{item.und}</Td>
                     <Td>
                       {item.qtd.toLocaleString('pt-BR', {

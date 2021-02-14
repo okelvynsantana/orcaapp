@@ -23,7 +23,7 @@ import {
 } from '@chakra-ui/react'
 import axios from 'axios'
 import { shade } from 'polished'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useBudget } from '../context/BudgetContext'
 
 interface RenderServicesModalProps {
@@ -142,7 +142,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
         ...c,
         unitCoast: c.price * c.coef,
         directCoast: compositionDirectCoast,
-        finalPrice: compositionDirectCoast * (1 + basicData.bdi),
+        finalPrice: compositionDirectCoast * (1 + basicData.bdi / 100),
         items: c.items.map(i => {
           const itemQtd = c.qtd * i.coef
           console.log({ price: i.price, qtd: itemQtd })
@@ -153,7 +153,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
             qtd: itemQtd,
             unitCoast: i.price * i.coef,
             directCoast: itemDirectCoast,
-            finalPrice: itemDirectCoast * (1 + basicData.bdi),
+            finalPrice: itemDirectCoast * (1 + basicData.bdi / 100),
           }
         }),
       }
