@@ -19,15 +19,15 @@ export default async (req: NowRequest, res: NowResponse) => {
 
   const sheet = workbook.addWorksheet('Planilha Orçamentária')
   sheet.columns = [
-    { width: 25, style: { alignment: { horizontal: 'center' } } },
-    { width: 60, style: { alignment: { horizontal: 'center' } } },
-    { width: 25, style: { alignment: { horizontal: 'center' } } },
-    { width: 25, style: { alignment: { horizontal: 'center' } } },
-    { width: 25, style: { alignment: { horizontal: 'center' } } },
-    { width: 25, style: { alignment: { horizontal: 'center' } } },
-    { width: 25, style: { alignment: { horizontal: 'center' } } },
-    { width: 25, style: { alignment: { horizontal: 'center' } } },
-    { width: 25, style: { alignment: { horizontal: 'center' } } },
+    { width: 25, style: { alignment: { horizontal: 'left' } } },
+    { width: 60, style: { alignment: { horizontal: 'left' } } },
+    { width: 25, style: { alignment: { horizontal: 'left' } } },
+    { width: 25, style: { alignment: { horizontal: 'left' } } },
+    { width: 25, style: { alignment: { horizontal: 'left' } } },
+    { width: 25, style: { alignment: { horizontal: 'left' } } },
+    { width: 25, style: { alignment: { horizontal: 'left' } } },
+    { width: 25, style: { alignment: { horizontal: 'left' } } },
+    { width: 25, style: { alignment: { horizontal: 'left' } } },
     // { width: 40, style: { alignment: { horizontal: 'center' } } },
     // { width: 40, style: { alignment: { horizontal: 'center' } } },
     // { width: 40, style: { alignment: { horizontal: 'center' } } },
@@ -39,31 +39,31 @@ export default async (req: NowRequest, res: NowResponse) => {
    */
   sheet.getCell('A1').value = 'Orçamento'
   sheet.getCell('A1').font = { bold: true }
-  sheet.getCell('B1').value = basicData.constructionName
+  sheet.getCell('B1').value = basicData.constructionName || ' '
 
   sheet.getCell('D1').value = 'Responsável Técnico'
   sheet.getCell('D1').font = { bold: true }
-  sheet.getCell('E1').value = basicData.technicalManager
+  sheet.getCell('E1').value = basicData.technicalManager || ' '
 
   sheet.getCell('A2').value = 'BDI Médio'
   sheet.getCell('A2').font = { bold: true }
-  sheet.getCell('B2').value = `${basicData.bdi} %`
+  sheet.getCell('B2').value = `${basicData.bdi} %` || '0%'
 
   sheet.getCell('A3').value = 'Endereço'
   sheet.getCell('A3').font = { bold: true }
-  sheet.getCell('B3').value = basicData.address
+  sheet.getCell('B3').value = basicData.address || ' '
 
   sheet.getCell('A4').value = 'Proprietário'
   sheet.getCell('A4').font = { bold: true }
-  sheet.getCell('B4').value = basicData.proprietary
+  sheet.getCell('B4').value = basicData.proprietary || ' '
 
   /**
    * Dados
    */
 
-  sheet.getCell('A6').value = 'Código Sinapi'
+  sheet.getCell('A6').value = 'CÓDIGO SINAPI'
   sheet.getCell('A6').font = { bold: true }
-  sheet.getCell('B6').value = 'Descrição'
+  sheet.getCell('B6').value = 'DESCRIÇÃO'
   sheet.getCell('B6').font = { bold: true }
   sheet.getCell('C6').value = 'UND'
   sheet.getCell('C6').font = { bold: true }
@@ -71,24 +71,32 @@ export default async (req: NowRequest, res: NowResponse) => {
   sheet.getCell('D6').font = { bold: true }
   sheet.getCell('E6').value = 'COEF.'
   sheet.getCell('E6').font = { bold: true }
-  sheet.getCell('F6').value = 'Preço Unitário'
+  sheet.getCell('F6').value = 'PREÇO UNITÁRIO'
   sheet.getCell('F6').font = { bold: true }
-  sheet.getCell('G6').value = 'Custo Unitário'
+  sheet.getCell('G6').value = 'CUSTO UNITÁRIO'
   sheet.getCell('G6').font = { bold: true }
-  sheet.getCell('H6').value = 'Custo Direto'
+  sheet.getCell('H6').value = 'CUSTO DIRETO'
   sheet.getCell('H6').font = { bold: true }
-  sheet.getCell('I6').value = 'Preço de Venda'
+  sheet.getCell('I6').value = 'PREÇO DE VENDA'
   sheet.getCell('I6').font = { bold: true }
 
-  let rowNumber = 8
+  let rowNumber = 7
   for (const step of constructionSteps) {
     const row = sheet.getRow(rowNumber++)
 
-    row.getCell(2).value = step.stepName
+    row.getCell(2).value = step.stepName.toUpperCase()
     row.getCell(2).font = { bold: true }
+    row.fill = {
+      pattern: 'solid',
+      fgColor: {
+        argb: 'cccccc',
+      },
+      type: 'pattern',
+    }
 
     for (const composition of step.services) {
       const compositionRow = sheet.getRow(rowNumber++)
+      compositionRow.font = { bold: true }
       compositionRow.getCell(1).value = composition.compositionCode
       compositionRow.getCell(2).value = composition.compositionDescription
       compositionRow.getCell(3).value = composition.und
