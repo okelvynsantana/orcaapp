@@ -10,22 +10,56 @@ import {
   Text,
   useDisclosure,
   useTheme,
+  useToast,
 } from '@chakra-ui/react'
+import axios from 'axios'
 import { shade } from 'polished'
 import { useCallback, useState } from 'react'
+import save from 'save-file'
 import { useBudget } from '../context/BudgetContext'
 import AddStepModal from './AddStepModal'
 import ConstructionStep from './ConstructionStep'
 
 const ServicesForm: React.FC = () => {
-  const { constructionSteps } = useBudget()
+  const { constructionSteps, basicData } = useBudget()
   const { isOpen, onClose, onOpen } = useDisclosure()
   const [openDownloadModal, setOpenDownloadModal] = useState(false)
   const theme = useTheme()
+  const toast = useToast()
 
-  const handleDownload = useCallback(() => {
-    setOpenDownloadModal(true)
+  const sendDownload = useCallback(async (file: Buffer) => {
+    const buff = new Uint8Array(file).buffer
+    const blob = new Blob([buff], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    })
+
+    return save(blob, 'planilha-orcamentaria.xlsx')
   }, [])
+
+  const handleDownload = useCallback(async () => {
+    setOpenDownloadModal(true)
+
+    try {
+      const result = await axios.post('/api/exportExcel', {
+        basicData,
+        constructionSteps,
+      })
+      console.log(result)
+
+      console.log(typeof result.data.file.data)
+
+      await sendDownload(result.data.file.data)
+      setOpenDownloadModal(false)
+    } catch (error) {
+      toast({
+        title: 'Erro',
+        description: 'Ocorreu um erro ao gerar sua planilha, tente novamente.',
+        status: 'error',
+        isClosable: true,
+        position: 'bottom-right',
+      })
+    }
+  }, [openDownloadModal])
   return (
     <Flex width="100%" mt="40px" flexDir="column">
       <Flex></Flex>

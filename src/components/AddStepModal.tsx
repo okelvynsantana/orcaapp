@@ -64,6 +64,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
   const onCloseModal = () => {
     onClose()
     setSearchService('')
+    setResultServices([])
     setCompositions([])
     setLoading(false)
   }
