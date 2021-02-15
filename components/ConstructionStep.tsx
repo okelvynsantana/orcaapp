@@ -102,9 +102,9 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
               <Th>UND</Th>
               <Th>QTD</Th>
               <Th>Coef.</Th>
+              <Th>Preço Unitário</Th>
               <Th>Custo Unitário</Th>
               <Th>Custo Direto</Th>
-              <Th>Preço Unitário</Th>
               <Th>Preço de venda</Th>
             </Tr>
           </Thead>
@@ -128,6 +128,12 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
                     })}
                   </Td>
                   <Td>
+                    {s.price.toLocaleString('pt-BR', {
+                      currency: 'BRL',
+                      style: 'currency',
+                    })}
+                  </Td>
+                  <Td>
                     {s.unitCoast.toLocaleString('pt-BR', {
                       currency: 'BRL',
                       style: 'currency',
@@ -135,12 +141,6 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
                   </Td>
                   <Td>
                     {s.directCoast.toLocaleString('pt-BR', {
-                      currency: 'BRL',
-                      style: 'currency',
-                    })}
-                  </Td>
-                  <Td>
-                    {s.price.toLocaleString('pt-BR', {
                       currency: 'BRL',
                       style: 'currency',
                     })}

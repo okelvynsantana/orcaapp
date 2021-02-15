@@ -83,13 +83,13 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
   )
 
   const handleAddCompositionToStep = useCallback(
-    (composition: IComposition, qtd: number) => {
+    (composition: IComposition, qtd: string) => {
       const compositionsValue = [...compositions]
       const compositionIndex = compositionsValue.findIndex(
         c => c._id === composition._id
       )
 
-      if (qtd === 0) {
+      if (parseInt(qtd) === 0) {
         const clearComposition = compositionsValue.filter(
           c => composition._id !== c._id
         )
@@ -137,15 +137,14 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
     const compositionsValue = [...compositions]
 
     const newCompositions = compositionsValue.map(c => {
-      const compositionDirectCoast = c.price * c.qtd
+      const compositionDirectCoast = c.price * parseFloat(c.qtd)
       return {
         ...c,
         unitCoast: c.price * c.coef,
         directCoast: compositionDirectCoast,
         finalPrice: compositionDirectCoast * (1 + basicData.bdi / 100),
         items: c.items.map(i => {
-          const itemQtd = c.qtd * i.coef
-          console.log({ price: i.price, qtd: itemQtd })
+          const itemQtd = parseFloat(c.qtd) * i.coef
           const itemDirectCoast = i.price * itemQtd
 
           return {
@@ -158,8 +157,6 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
         }),
       }
     })
-
-    console.log(newCompositions)
 
     return newCompositions
   }
@@ -238,15 +235,12 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
                         }).format(result.price)}
                       </Td>
                       <Td maxW="10px">
+                        {getQuantity(result._id)}
                         <Input
                           value={getQuantity(result._id)}
                           onChange={e => {
-                            handleAddCompositionToStep(
-                              result,
-                              parseInt(e.target.value)
-                            )
+                            handleAddCompositionToStep(result, e.target.value)
                           }}
-                          type="number"
                         />
                       </Td>
                       <Td>
