@@ -235,7 +235,6 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
                         }).format(result.price)}
                       </Td>
                       <Td maxW="10px">
-                        {getQuantity(result._id)}
                         <Input
                           value={getQuantity(result._id)}
                           onChange={e => {
