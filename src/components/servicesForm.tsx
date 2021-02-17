@@ -36,18 +36,14 @@ const ServicesForm: React.FC = () => {
     return save(blob, 'planilha-orcamentaria.xlsx')
   }, [])
 
-  const handleDownload = useCallback(async () => {
+  const handleDownload = async () => {
     setOpenDownloadModal(true)
-
+    console.log(constructionSteps, basicData)
     try {
       const result = await axios.post('/api/exportExcel', {
         basicData,
         constructionSteps,
       })
-      console.log(result)
-
-      console.log(typeof result.data.file.data)
-
       await sendDownload(result.data.file.data)
       setOpenDownloadModal(false)
     } catch (error) {
@@ -59,7 +55,7 @@ const ServicesForm: React.FC = () => {
         position: 'bottom-right',
       })
     }
-  }, [openDownloadModal])
+  }
   return (
     <Flex width="100%" mt="40px" flexDir="column">
       <Flex></Flex>
