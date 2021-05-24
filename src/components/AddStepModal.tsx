@@ -3,7 +3,6 @@ import {
   Button,
   Flex,
   Input,
-  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -21,7 +20,6 @@ import {
   useTheme,
   useToast,
 } from '@chakra-ui/react'
-import axios from 'axios'
 import { shade } from 'polished'
 import { useCallback, useState } from 'react'
 import { useBudget } from '../context/BudgetContext'
@@ -52,7 +50,12 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
   onClose,
   isOpen,
 }) => {
-  const { constructionSteps, setConstructionSteps, basicData } = useBudget()
+  const {
+    constructionSteps,
+    setConstructionSteps,
+    basicData,
+    rootCompositions,
+  } = useBudget()
   const [searchService, setSearchService] = useState('')
   const [resultServices, setResultServices] = useState([])
   const [stepName, setStepName] = useState('')
@@ -125,13 +128,17 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
   const onChangeHandler = useCallback(async (e: any) => {
     setLoading(true)
     setSearchService(e.target.value)
-    setTimeout(async () => {
-      const result = await axios.get(
-        `/api/SearchProducts?searchTerm=${e.target.value}`
+    console.log(rootCompositions)
+
+    const result = rootCompositions.filter(service =>
+      service.compositionDescription.includes(
+        e.target.value.charAt(0).toUpperCase() ||
+          e.target.value.charAt(0).toLowerCase() ||
+          e.target.value
       )
-      setResultServices(result.data)
-      setLoading(false)
-    }, 100)
+    )
+    setResultServices(result)
+    setLoading(false)
   }, [])
 
   const getServices = () => {
@@ -192,17 +199,6 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
           <RenderEmptyContent />
         ) : (
           <>
-            <Flex w="100%" justifyContent="flex-end" color="#AAA">
-              <Text mt="20px" alignSelf="flex-end">
-                Dados extraídos da planilha{' '}
-                <Link
-                  target="_blank"
-                  href="https://www.caixa.gov.br/Downloads/sinapi-a-partir-jul-2009-mg/SINAPI_ref_Insumos_Composicoes_MG_122020_NaoDesonerado.zip"
-                >
-                  SINAPI_ref_Insumos_Composicoes_MG_122020_NaoDesonerado
-                </Link>
-              </Text>
-            </Flex>
             <Flex>
               <Table variant="simple" flexDir="row" marginTop="25px">
                 <Thead>

@@ -1,23 +1,22 @@
 import { Button, Flex, Image, Text, useTheme } from '@chakra-ui/react'
-import CustomHeader from '../components/header'
+import CustomHeader from '../components/CustomHeader'
 import { shade } from 'polished'
-import { useRouter } from 'next/router'
 import Head from 'next/head'
+import { UploadFileModal } from '../components/UploadFileModal'
+import { useState } from 'react'
 
 const Home: React.FC = () => {
   const theme = useTheme()
-  const router = useRouter()
+  const [openUploadFileModal, setOpenUploadFileModal] = useState(false)
 
-  const handleOnClick = (e: any) => {
-    e.preventDefault()
-    router.push('/create-budget')
+  const handleOnClick = () => {
+    setOpenUploadFileModal(true)
   }
   return (
     <>
       <Head>
         <title>
-          MeuOrçamentoFácil | Crie sua planilha orçamentária de forma fácil e
-          rápida
+          OrçaApp | Crie sua planilha orçamentária de forma fácil e rápida
         </title>
       </Head>
       <Flex flexDir="column" alignItems="center" justifyContent="center">
@@ -38,6 +37,10 @@ const Home: React.FC = () => {
           Criar Novo
         </Button>
       </Flex>
+      <UploadFileModal
+        isOpen={openUploadFileModal}
+        onClose={() => setOpenUploadFileModal(false)}
+      />
     </>
   )
 }

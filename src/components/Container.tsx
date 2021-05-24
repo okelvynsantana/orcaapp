@@ -1,7 +1,7 @@
 import { useBudget } from '../context/BudgetContext'
 import CardBody from './cardBody'
 import PersonalDataForm from './PersonalDataForm'
-import ServicesForm from './servicesForm'
+import ServicesForm from './ServicesForm'
 
 const FormContainer: React.FC = () => {
   const { step } = useBudget()
