@@ -28,11 +28,6 @@ export default async (req: NowRequest, res: NowResponse) => {
     { width: 25, style: { alignment: { horizontal: 'left' } } },
     { width: 25, style: { alignment: { horizontal: 'left' } } },
     { width: 25, style: { alignment: { horizontal: 'left' } } },
-    // { width: 40, style: { alignment: { horizontal: 'center' } } },
-    // { width: 40, style: { alignment: { horizontal: 'center' } } },
-    // { width: 40, style: { alignment: { horizontal: 'center' } } },
-    // { width: 40, style: { alignment: { horizontal: 'center' } } },
-    // { width: 40, style: { alignment: { horizontal: 'center' } } },
   ]
   /*
    * Cabeçalho da planilha com infos básicas

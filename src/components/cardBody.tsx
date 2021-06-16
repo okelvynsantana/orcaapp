@@ -5,7 +5,7 @@ const CardBody: React.FC = props => {
     <Flex
       bg="#FFF"
       padding="40px"
-      width="75%"
+      width="100%"
       mt="20px"
       borderRadius="6px"
       flexDir="column"

@@ -12,9 +12,9 @@ import { Spinner } from '@chakra-ui/spinner'
 import axios from 'axios'
 import { useCallback, useState } from 'react'
 import Dropzone, { FileWithPath } from 'react-dropzone'
-import { useBudget } from '../context/BudgetContext'
 import { useRouter } from 'next/router'
 import { useToast } from '@chakra-ui/toast'
+
 interface UploadFileModalProps {
   onClose: () => void
   isOpen: boolean
@@ -23,40 +23,47 @@ export function UploadFileModal({ isOpen, onClose }: UploadFileModalProps) {
   const toast = useToast()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const { setRootCompositions } = useBudget()
-  const handleDropFile = useCallback((acceptedFiles: FileWithPath[]) => {
-    setLoading(true)
+  const handleSendFile = async (formData: FormData) => {
     try {
-      const [file] = acceptedFiles
+      const response = await axios.post('/api/extractExcelData', formData, {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      })
 
-      const reader = new FileReader()
-      reader.onload = async () => {
-        const formData = new FormData()
-        formData.append('file', file)
-        const response = await axios.post('/api/extractExcelData', formData, {
-          headers: {
-            'content-type': 'multipart/form-data',
-          },
-        })
-        setRootCompositions(response.data)
-        setLoading(false)
-        onClose()
-      }
+      console.log(response)
 
-      reader.readAsArrayBuffer(file)
+      localStorage.setItem('collection', response.data.collectionName)
+
+      setLoading(false)
+      onClose()
+      router.push('/criar-orcamento')
     } catch (err) {
       toast({
         title: 'Erro!',
         description:
-          'Ocorreu um erro ao extrair os dados do seu arquivo, verifique o seu arquvi e tente novamente mais tarde',
+          'Ocorreu um erro ao extrair os dados do seu arquivo, verifique o seu arquivo e tente novamente mais tarde',
         isClosable: true,
         status: 'error',
         duration: 3000,
         position: 'bottom-right',
       })
-    } finally {
-      router.push('/create-budget')
+      onClose()
     }
+  }
+
+  const handleDropFile = useCallback(async (acceptedFiles: FileWithPath[]) => {
+    setLoading(true)
+
+    const [file] = acceptedFiles
+
+    const reader = new FileReader()
+    reader.onload = async () => {
+      const formData = new FormData()
+      formData.append('file', file)
+      await handleSendFile(formData)
+    }
+    reader.readAsArrayBuffer(file)
   }, [])
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered>

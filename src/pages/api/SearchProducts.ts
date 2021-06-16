@@ -29,7 +29,7 @@ export default async (
   req: NowRequest,
   res: NowResponse
 ): Promise<NowResponse> => {
-  const { searchTerm } = req.query
+  const { searchTerm, collectionName } = req.query
   let term
   if (Array.isArray(searchTerm)) {
     term = searchTerm.join(' ')
@@ -38,7 +38,7 @@ export default async (
   }
 
   const db = await connectToDatabase(process.env.MONGO_URI)
-  const collection = db.collection('sinapi-mg')
+  const collection = db.collection(collectionName as string)
   collection.createIndex({ compositionDescription: 'text' })
 
   const compositions = await collection

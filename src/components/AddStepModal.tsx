@@ -20,6 +20,7 @@ import {
   useTheme,
   useToast,
 } from '@chakra-ui/react'
+import axios from 'axios'
 import { shade } from 'polished'
 import { useCallback, useState } from 'react'
 import { useBudget } from '../context/BudgetContext'
@@ -50,12 +51,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
   onClose,
   isOpen,
 }) => {
-  const {
-    constructionSteps,
-    setConstructionSteps,
-    basicData,
-    rootCompositions,
-  } = useBudget()
+  const { constructionSteps, setConstructionSteps, basicData } = useBudget()
   const [searchService, setSearchService] = useState('')
   const [resultServices, setResultServices] = useState([])
   const [stepName, setStepName] = useState('')
@@ -128,17 +124,24 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
   const onChangeHandler = useCallback(async (e: any) => {
     setLoading(true)
     setSearchService(e.target.value)
-    console.log(rootCompositions)
 
-    const result = rootCompositions.filter(service =>
-      service.compositionDescription.includes(
-        e.target.value.charAt(0).toUpperCase() ||
-          e.target.value.charAt(0).toLowerCase() ||
-          e.target.value
+    setTimeout(async () => {
+      const collectionName = localStorage.getItem('collection')
+      console.log(collectionName)
+      const result = await axios.get(
+        `/api/SearchProducts?searchTerm=${e.target.value}&collectionName=${collectionName}`
       )
-    )
-    setResultServices(result)
-    setLoading(false)
+
+      // const result = comp.filter(service =>
+      //   service.compositionDescription.includes(
+      //     e.target.value.charAt(0).toUpperCase() ||
+      //       e.target.value.charAt(0).toLowerCase() ||
+      //       e.target.value
+      //   )
+      // )
+      setResultServices(result.data)
+      setLoading(false)
+    }, 100)
   }, [])
 
   const getServices = () => {
@@ -215,6 +218,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
                 <Tbody>
                   {resultServices.map(result => (
                     <Tr key={result._id}>
+                      {console.log(result)}
                       <Td>{result.compositionCode}</Td>
                       <Td
                         maxW="100px"
@@ -224,7 +228,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
                         {result.compositionDescription}
                       </Td>
                       <Td>{result.und}</Td>
-                      <Td>{result.coef}</Td>
+                      <Td>1</Td>
                       <Td>
                         {new Intl.NumberFormat('pt-BR', {
                           style: 'currency',

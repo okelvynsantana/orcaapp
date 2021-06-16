@@ -1,20 +1,27 @@
 /* eslint-disable array-callback-return */
 
 import excelTOJSON from 'convert-excel-to-json'
-import { v4 as uuidv4 } from 'uuid'
-
 export interface Iitem {
   compositionCode: string
   compositionDescription: string
   und: string
   itemCode: string
   itemDescription: string
+  itemUnd: string
   coef: string
   price: string
 }
-
 function groupItems(items: Iitem[]) {
   const newItems = []
+
+  function sumAllItemsPrice(compositionCode: string) {
+    const composition = newItems.find(
+      c => c.compositionCode === compositionCode
+    )
+    const prices = composition.items.map(i => i.price)
+    const totalPrice = prices.reduce((a, b) => a + b)
+    return totalPrice
+  }
 
   items.map(item => {
     const itemExistsInArray = newItems.findIndex(
@@ -25,17 +32,10 @@ function groupItems(items: Iitem[]) {
         newItems.push({
           compositionCode: item.compositionCode,
           compositionDescription: item.compositionDescription,
-          _id: uuidv4(),
-          items: [
-            {
-              itemCode: item.itemCode,
-              itemDescription: item.itemDescription,
-              und: item.und,
-              coef: parseFloat(item.coef.replace(',', '.')),
-              price: parseFloat(item.price.replace(',', '.')),
-              _id: uuidv4(),
-            },
-          ],
+          coef: 1,
+          price: null,
+          und: item.und,
+          items: [],
         })
       }
     } else {
@@ -46,8 +46,10 @@ function groupItems(items: Iitem[]) {
           und: item.und,
           coef: parseFloat(item.coef.replace(',', '.')),
           price: parseFloat(item.price.replace(',', '.')),
-          _id: uuidv4(),
         })
+        newItems[itemExistsInArray].price = sumAllItemsPrice(
+          item.compositionCode
+        )
       }
     }
   })
@@ -70,6 +72,7 @@ export async function extractSinapiData(filePath: string) {
           I: 'und',
           M: 'itemCode',
           N: 'itemDescription',
+          O: 'itemUnd',
           Q: 'coef',
           R: 'price',
         },
