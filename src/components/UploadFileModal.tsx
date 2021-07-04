@@ -48,6 +48,7 @@ export function UploadFileModal({ isOpen, onClose }: UploadFileModalProps) {
         duration: 3000,
         position: 'bottom-right',
       })
+      setLoading(false)
       onClose()
     }
   }
