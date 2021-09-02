@@ -33,6 +33,21 @@ interface IComposition {
   finalPrice: number
   items: IService[]
 }
+interface RootComposition {
+  _id: string
+  compositionCode: string
+  compositionDescription: string
+  items: RootService[]
+}
+
+interface RootService {
+  _id: string
+  itemCode: string
+  itemDescription: string
+  und: string
+  coef: number
+  price: number
+}
 
 interface IConstuctionStep {
   stepName: string
@@ -41,11 +56,13 @@ interface IConstuctionStep {
 
 interface IBudgetData {
   basicData: IBasicData
+  setBasicData: (data: IBasicData) => void
   constructionSteps: IConstuctionStep[]
   setConstructionSteps: (constructionSteps: IConstuctionStep[]) => void
   step: number
   setStep: (step: number) => void
-  setBasicData: (data: IBasicData) => void
+  rootCompositions: RootComposition[]
+  setRootCompositions: (compositions: RootComposition[]) => void
 }
 
 const budgetState: IBudgetData = {
@@ -61,13 +78,18 @@ const budgetState: IBudgetData = {
   setStep: () => {},
   constructionSteps: [],
   setConstructionSteps: () => {},
+  rootCompositions: [],
+  setRootCompositions: () => {},
 }
 const BudgetContext = createContext<IBudgetData>(budgetState)
-
 function BudgetProvider({ children }) {
   const [basicData, setBasicData] = useState(budgetState.basicData)
   const [step, setStep] = useState(1)
   const [constructionSteps, setConstructionSteps] = useState([])
+  const [rootCompositions, setRootCompositions] = useState<RootComposition[]>(
+    []
+  )
+
   return (
     <BudgetContext.Provider
       value={{
@@ -77,6 +99,8 @@ function BudgetProvider({ children }) {
         setStep,
         constructionSteps,
         setConstructionSteps,
+        rootCompositions,
+        setRootCompositions,
       }}
     >
       {children}

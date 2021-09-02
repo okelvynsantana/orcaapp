@@ -3,7 +3,6 @@ import {
   Button,
   Flex,
   Input,
-  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -125,10 +124,21 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
   const onChangeHandler = useCallback(async (e: any) => {
     setLoading(true)
     setSearchService(e.target.value)
+
     setTimeout(async () => {
+      const collectionName = localStorage.getItem('collection')
+      console.log(collectionName)
       const result = await axios.get(
-        `/api/SearchProducts?searchTerm=${e.target.value}`
+        `/api/SearchProducts?searchTerm=${e.target.value}&collectionName=${collectionName}`
       )
+
+      // const result = comp.filter(service =>
+      //   service.compositionDescription.includes(
+      //     e.target.value.charAt(0).toUpperCase() ||
+      //       e.target.value.charAt(0).toLowerCase() ||
+      //       e.target.value
+      //   )
+      // )
       setResultServices(result.data)
       setLoading(false)
     }, 100)
@@ -192,17 +202,6 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
           <RenderEmptyContent />
         ) : (
           <>
-            <Flex w="100%" justifyContent="flex-end" color="#AAA">
-              <Text mt="20px" alignSelf="flex-end">
-                Dados extraídos da planilha{' '}
-                <Link
-                  target="_blank"
-                  href="https://www.caixa.gov.br/Downloads/sinapi-a-partir-jul-2009-mg/SINAPI_ref_Insumos_Composicoes_MG_122020_NaoDesonerado.zip"
-                >
-                  SINAPI_ref_Insumos_Composicoes_MG_122020_NaoDesonerado
-                </Link>
-              </Text>
-            </Flex>
             <Flex>
               <Table variant="simple" flexDir="row" marginTop="25px">
                 <Thead>
@@ -219,6 +218,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
                 <Tbody>
                   {resultServices.map(result => (
                     <Tr key={result._id}>
+                      {console.log(result)}
                       <Td>{result.compositionCode}</Td>
                       <Td
                         maxW="100px"
@@ -228,7 +228,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
                         {result.compositionDescription}
                       </Td>
                       <Td>{result.und}</Td>
-                      <Td>{result.coef}</Td>
+                      <Td>1</Td>
                       <Td>
                         {new Intl.NumberFormat('pt-BR', {
                           style: 'currency',

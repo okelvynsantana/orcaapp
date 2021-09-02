@@ -1,7 +1,7 @@
 import { Flex, Text } from '@chakra-ui/react'
 import Head from 'next/head'
 import FormContainer from '../components/Container'
-import CustomHeader from '../components/header'
+import CustomHeader from '../components/CustomHeader'
 
 import { BudgetProvider } from '../context/BudgetContext'
 

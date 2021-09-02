@@ -6,7 +6,7 @@ const global = {
     marging: 0,
   },
   body: {
-    background: '#EEE',
+    background: '#FFF',
   },
 }
 
@@ -17,7 +17,7 @@ const fonts = {
 
 const colors = {
   brand: {
-    primary: '#6F10BA',
+    primary: '#5ecce6',
   },
 }
 const Input = {
