@@ -54,12 +54,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     form.parse(req, async (error, fields, files) => {
+      const db = await connectToDatabase(process.env.MONGO_URI)
       const response = await extractSinapiData(filePath)
       console.log(process.env.MONGO_URI)
       console.log('response', response)
 
       const collectionName = `sinapi-mg-${uuid()}`
-      const db = await connectToDatabase(process.env.MONGO_URI)
       const collection = db.collection(collectionName)
       collection.insertMany(response)
       res.status(200).json({ collectionName })
