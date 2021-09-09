@@ -58,10 +58,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       console.log(process.env.MONGO_URI)
       console.log('response', response)
 
-      const db = await connectToDatabase(process.env.MONGO_URI)
       const collectionName = `sinapi-mg-${uuid()}`
+      const db = await connectToDatabase(process.env.MONGO_URI)
       const collection = db.collection(collectionName)
-      await collection.insertMany(response)
+      collection.insertMany(response)
       res.status(200).json({ collectionName })
     })
   } catch (err) {
