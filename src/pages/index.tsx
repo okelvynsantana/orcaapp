@@ -1,7 +1,7 @@
 import { Button, Flex, Image, Text, useTheme } from '@chakra-ui/react'
 import CustomHeader from '../components/CustomHeader'
 import { shade } from 'polished'
-import Head from 'next/head'
+import NextHead from 'next/head'
 import { UploadFileModal } from '../components/UploadFileModal'
 import { useState } from 'react'
 
@@ -13,11 +13,11 @@ const Home: React.FC = () => {
   }
   return (
     <>
-      <Head>
+      <NextHead>
         <title>
           OrçaApp | Crie sua planilha orçamentária de forma fácil e rápida
         </title>
-      </Head>
+      </NextHead>
       <Flex
         flexDir="column"
         w="100%"
