@@ -1,4 +1,4 @@
-import { Flex, Icon, Image, Link, Tooltip } from '@chakra-ui/react'
+import { Flex, Image, Link } from '@chakra-ui/react'
 // import { FaGithub } from 'react-icons/fa'
 
 const CustomHeader: React.FC = () => {
@@ -15,12 +15,12 @@ const CustomHeader: React.FC = () => {
       </Link>
       <Flex>
         <Link
-          href="https://www.ifmg.edu.br/portal/home"
+          href="https://www.ifmg.edu.br/piumhi"
           target="_blank"
           marginLeft="20px"
           marginRight="24px"
         >
-          <Image src="logovertical.jpg" w="60px" />
+          <Image src="vertical_1.png" w="120px" />
         </Link>
       </Flex>
     </Flex>

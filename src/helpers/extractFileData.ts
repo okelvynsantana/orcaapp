@@ -34,7 +34,7 @@ function groupItems(items: Iitem[]) {
           compositionDescription: item.compositionDescription,
           coef: 1,
           price: null,
-          und: item.und,
+          und: item.itemUnd,
           items: [],
         })
       }
