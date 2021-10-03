@@ -56,18 +56,25 @@ const Home: React.FC = () => {
         >
           <Text textAlign="center">
             Aplicativo desenvolvido para Trabalho de Conclusão de Curso -
-            Bacharelado Engenharia Civil
+            Bacharelado Engenharia Civil{' '}
+            <Text>
+              Instituto Federal de Educação, Ciência e Tecnologia de Minas
+              Gerais - Campus Avançado Piumhi -
+              <a href="https://www.ifmg.edu.br/piumhi">
+                <strong>www.ifmg.edu.br/piumhi</strong>
+              </a>
+            </Text>
             <Text>
               Prof. M.Sc. Humberto Melo -{' '}
               <a href="mailto:humberto.melo@ifmg.edu.br">
-                humberto.melo@ifmg.edu.br
+                <strong>humberto.melo@ifmg.edu.br</strong>
               </a>
             </Text>
             <Text>
               {' '}
               Mariana Souza -{' '}
               <a href="mailto:marianaus2013@gmail.com">
-                marianaus2013@gmail.com
+                <strong>marianaus2013@gmail.com</strong>
               </a>
             </Text>
           </Text>
