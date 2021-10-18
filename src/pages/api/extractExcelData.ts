@@ -36,6 +36,7 @@ const connectToDatabase = async (uri: string) => {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log('chamou o service')
   try {
     const form = new formidable.IncomingForm({
       uploadDir: './public/uploads',
@@ -53,12 +54,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     form.parse(req, async (error, fields, files) => {
+      const db = await connectToDatabase(process.env.MONGO_URI)
       const response = await extractSinapiData(filePath)
 
-      const db = await connectToDatabase(process.env.MONGO_URI)
       const collectionName = `sinapi-mg-${uuid()}`
       const collection = db.collection(collectionName)
-      await collection.insertMany(response)
+      console.log(process.env.MONGO_URI)
+      console.log('response', response)
+      collection.insertMany(response)
       res.status(200).json({ collectionName })
     })
   } catch (err) {

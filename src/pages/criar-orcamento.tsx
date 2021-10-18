@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react'
-import Head from 'next/head'
+import NextHead from 'next/head'
 import FormContainer from '../components/Container'
 import CustomHeader from '../components/CustomHeader'
 
@@ -8,10 +8,10 @@ import { BudgetProvider } from '../context/BudgetContext'
 const createBudget: React.FC = () => {
   return (
     <div>
-      <Head>
+      <NextHead>
         <title>MeuOrçamentoFacil | Criar Orçamento</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
+      </NextHead>
       <BudgetProvider>
         <Flex flexDir="column" alignItems="center" justifyContent="center">
           <CustomHeader />

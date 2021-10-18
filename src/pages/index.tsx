@@ -1,7 +1,7 @@
 import { Button, Flex, Image, Text, useTheme } from '@chakra-ui/react'
 import CustomHeader from '../components/CustomHeader'
 import { shade } from 'polished'
-import Head from 'next/head'
+import NextHead from 'next/head'
 import { UploadFileModal } from '../components/UploadFileModal'
 import { useState } from 'react'
 
@@ -13,11 +13,11 @@ const Home: React.FC = () => {
   }
   return (
     <>
-      <Head>
+      <NextHead>
         <title>
           OrçaApp | Crie sua planilha orçamentária de forma fácil e rápida
         </title>
-      </Head>
+      </NextHead>
       <Flex
         flexDir="column"
         w="100%"
@@ -47,6 +47,30 @@ const Home: React.FC = () => {
           >
             Criar Novo
           </Button>
+        </Flex>
+        <Flex
+          flexDir="column"
+          alignItems="center"
+          justifyContent="center"
+          pb="50px"
+        >
+          <Text textAlign="center">
+            Aplicativo desenvolvido para Trabalho de Conclusão de Curso -
+            Bacharelado Engenharia Civil
+            <Text>
+              Prof. M.Sc. Humberto Melo -{' '}
+              <a href="mailto:humberto.melo@ifmg.edu.br">
+                humberto.melo@ifmg.edu.br
+              </a>
+            </Text>
+            <Text>
+              {' '}
+              Mariana Souza -{' '}
+              <a href="mailto:marianaus2013@gmail.com">
+                marianaus2013@gmail.com
+              </a>
+            </Text>
+          </Text>
         </Flex>
       </Flex>
       <UploadFileModal
