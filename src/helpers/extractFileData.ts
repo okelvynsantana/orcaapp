@@ -28,22 +28,22 @@ function groupItems(items: Iitem[]) {
       i => item.compositionCode === i.compositionCode
     )
     if (itemExistsInArray < 0) {
-      if (item.itemDescription.length > 1) {
-        newItems.push({
-          compositionCode: item.compositionCode,
-          compositionDescription: item.compositionDescription,
-          coef: 1,
-          price: null,
-          und: item.itemUnd,
-          items: [],
-        })
-      }
+      // if (item.itemDescription.length > 1) {
+      newItems.push({
+        compositionCode: item.compositionCode,
+        compositionDescription: item.compositionDescription,
+        coef: 1,
+        price: null,
+        und: item.und,
+        items: [],
+      })
+      // }
     } else {
       if (item.itemDescription.length > 1) {
         newItems[itemExistsInArray].items.push({
           itemCode: item.itemCode,
           itemDescription: item.itemDescription,
-          und: item.und,
+          und: item.itemUnd,
           coef: parseFloat(item.coef.replace(',', '.')),
           price: parseFloat(item.price.replace(',', '.')),
         })
