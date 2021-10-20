@@ -36,7 +36,6 @@ const connectToDatabase = async (uri: string) => {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log('chamou o service')
   try {
     const form = new formidable.IncomingForm({
       uploadDir: './public/uploads',
@@ -50,7 +49,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       filePath = file.path
     })
     form.on('error', err => {
-      console.log('deu ruim', err)
+      console.error('Erro ao fazer upload do arquivo', err)
     })
 
     form.parse(req, async (error, fields, files) => {
@@ -59,8 +58,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       const collectionName = `sinapi-mg-${uuid()}`
       const collection = db.collection(collectionName)
-      console.log(process.env.MONGO_URI)
-      console.log('response', response)
+
       collection.insertMany(response)
       res.status(200).json({ collectionName })
     })

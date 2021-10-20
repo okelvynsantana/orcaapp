@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 interface IBasicData {
   constructionName: string
@@ -85,10 +85,42 @@ const BudgetContext = createContext<IBudgetData>(budgetState)
 function BudgetProvider({ children }) {
   const [basicData, setBasicData] = useState(budgetState.basicData)
   const [step, setStep] = useState(1)
-  const [constructionSteps, setConstructionSteps] = useState([])
+  const [constructionSteps, setConstructionSteps] = useState<
+    IConstuctionStep[]
+  >([])
   const [rootCompositions, setRootCompositions] = useState<RootComposition[]>(
     []
   )
+
+  useEffect(() => {
+    if (constructionSteps.length) {
+      const newConstructionSteps = constructionSteps.map(constructionStep => ({
+        ...constructionStep,
+        services: constructionStep.services.map(service => {
+          const compositionDirectCoast = service.price * service.qtd
+
+          return {
+            ...service,
+            unitCoast: service.price * service.coef,
+            directCoast: compositionDirectCoast,
+            finalPrice: compositionDirectCoast * (1 + basicData.bdi / 100),
+            items: service.items.map(item => {
+              const itemQtd = service.qtd * item.coef
+              const itemDirectCoast = item.price * itemQtd
+              return {
+                ...item,
+                qtd: itemQtd,
+                unitCoast: item.price * item.coef,
+                directCoast: itemDirectCoast,
+                finalPrice: itemDirectCoast * (1 + basicData.bdi / 100),
+              }
+            }),
+          }
+        }),
+      }))
+      setConstructionSteps(newConstructionSteps)
+    }
+  }, [basicData])
 
   return (
     <BudgetContext.Provider
