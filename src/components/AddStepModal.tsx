@@ -127,7 +127,6 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
 
     setTimeout(async () => {
       const collectionName = localStorage.getItem('collection')
-      console.log(collectionName)
       const result = await axios.get(
         `/api/SearchProducts?searchTerm=${e.target.value}&collectionName=${collectionName}`
       )
@@ -218,7 +217,6 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
                 <Tbody>
                   {resultServices.map(result => (
                     <Tr key={result._id}>
-                      {console.log(result)}
                       <Td>{result.compositionCode}</Td>
                       <Td
                         maxW="100px"

@@ -38,7 +38,6 @@ const ServicesForm: React.FC = () => {
 
   const handleDownload = async () => {
     setOpenDownloadModal(true)
-    console.log(constructionSteps, basicData)
     try {
       const result = await axios.post('/api/exportExcel', {
         basicData,

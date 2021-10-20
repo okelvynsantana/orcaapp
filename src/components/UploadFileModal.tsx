@@ -31,8 +31,6 @@ export function UploadFileModal({ isOpen, onClose }: UploadFileModalProps) {
         },
       })
 
-      console.log(response)
-
       localStorage.setItem('collection', response.data.collectionName)
 
       setLoading(false)
