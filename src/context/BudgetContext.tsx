@@ -6,6 +6,8 @@ interface IBasicData {
   technicalManager: string
   address: string
   bdi: number
+  totalPrice: number
+  totalCoast: number
 }
 
 interface IService {
@@ -54,13 +56,14 @@ interface IConstuctionStep {
   services: IComposition[]
 }
 
-interface IBudgetData {
+type IBudgetData = {
   basicData: IBasicData
   setBasicData: (data: IBasicData) => void
   constructionSteps: IConstuctionStep[]
   setConstructionSteps: (constructionSteps: IConstuctionStep[]) => void
   step: number
   setStep: (step: number) => void
+  setCoastAndFinalPrice: (constructionSteps: IConstuctionStep[]) => void
   rootCompositions: RootComposition[]
   setRootCompositions: (compositions: RootComposition[]) => void
 }
@@ -72,6 +75,8 @@ const budgetState: IBudgetData = {
     technicalManager: '',
     address: '',
     bdi: 0,
+    totalPrice: 0,
+    totalCoast: 0,
   },
   setBasicData: () => {},
   step: 1,
@@ -80,6 +85,7 @@ const budgetState: IBudgetData = {
   setConstructionSteps: () => {},
   rootCompositions: [],
   setRootCompositions: () => {},
+  setCoastAndFinalPrice: () => {},
 }
 const BudgetContext = createContext<IBudgetData>(budgetState)
 function BudgetProvider({ children }) {
@@ -122,6 +128,32 @@ function BudgetProvider({ children }) {
     }
   }, [basicData])
 
+  function updateCoasts(steps: IConstuctionStep[]) {
+    let directCoast = 0
+    let finalPrice = 0
+    steps.map(cs => {
+      cs.services.map(service => {
+        console.log(service)
+        directCoast = directCoast + service.directCoast
+        finalPrice = finalPrice + service.finalPrice
+      })
+    })
+    return {
+      totalPrice: finalPrice,
+      totalCoast: directCoast,
+    }
+  }
+
+  const setCoastAndFinalPrice = (cs: IConstuctionStep[]) => {
+    const coasts = updateCoasts(cs)
+
+    setBasicData({
+      ...basicData,
+      totalCoast: coasts.totalCoast,
+      totalPrice: coasts.totalPrice,
+    })
+  }
+
   return (
     <BudgetContext.Provider
       value={{
@@ -133,6 +165,7 @@ function BudgetProvider({ children }) {
         setConstructionSteps,
         rootCompositions,
         setRootCompositions,
+        setCoastAndFinalPrice,
       }}
     >
       {children}
