@@ -27,6 +27,10 @@ const ServicesForm: React.FC = () => {
   const theme = useTheme()
   const toast = useToast()
 
+  // useEffect(() => {
+  //   setCoastAndFinalPrice()
+  // }, [constructionSteps])
+
   const sendDownload = useCallback(async (file: Buffer) => {
     const buff = new Uint8Array(file).buffer
     const blob = new Blob([buff], {
@@ -60,6 +64,21 @@ const ServicesForm: React.FC = () => {
       <Flex></Flex>
       <Flex alignItems="center" marginTop="10px" justifyContent="space-between">
         <Text fontSize="24px">Etapas da obra</Text>
+        <Text>
+          <strong>Custo direto: </strong>
+          {basicData.totalCoast.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          })}
+        </Text>
+        <Text>
+          <strong>Preço de venda: </strong>
+          {basicData.totalPrice.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          })}
+        </Text>
+
         <Button
           background="brand.primary"
           color="#FFF"

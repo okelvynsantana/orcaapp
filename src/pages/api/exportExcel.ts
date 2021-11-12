@@ -51,6 +51,19 @@ export default async (req: NowRequest, res: NowResponse) => {
   sheet.getCell('A4').value = 'Proprietário'
   sheet.getCell('A4').font = { bold: true }
   sheet.getCell('B4').value = basicData.proprietary || ' '
+  sheet.getCell('D3').value = 'Custo Direto'
+  sheet.getCell('D3').font = { bold: true }
+  sheet.getCell('E3').value = basicData.totalCoast.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  })
+  sheet.getCell('D4').value = 'Preço de venda'
+  sheet.getCell('D4').font = { bold: true }
+
+  sheet.getCell('E4').value = basicData.totalPrice.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  })
 
   /**
    * Dados

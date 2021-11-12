@@ -40,7 +40,12 @@ const PersonalDataForm: React.FC = () => {
     (values: IFormData, _: FormikHelpers<IFormData>) => {
       setStep(2)
       setInEdit(false)
-      setBasicData({ ...values, bdi: parseFloat(values.bdi.replace(',', '.')) })
+      setBasicData({
+        ...values,
+        bdi: parseFloat(values.bdi.replace(',', '.')),
+        totalCoast: 0,
+        totalPrice: 0,
+      })
     },
     []
   )

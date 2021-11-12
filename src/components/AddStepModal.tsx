@@ -51,7 +51,12 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
   onClose,
   isOpen,
 }) => {
-  const { constructionSteps, setConstructionSteps, basicData } = useBudget()
+  const {
+    constructionSteps,
+    setConstructionSteps,
+    basicData,
+    setCoastAndFinalPrice,
+  } = useBudget()
   const [searchService, setSearchService] = useState('')
   const [resultServices, setResultServices] = useState([])
   const [stepName, setStepName] = useState('')
@@ -192,6 +197,10 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
       duration: 3000,
       position: 'bottom-right',
     })
+
+    setTimeout(() => {
+      setCoastAndFinalPrice(constructionStepsValue)
+    }, 1000)
   }, [stepName, compositions])
 
   const RenderTable = () => {
@@ -313,7 +322,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
               background="brand.primary"
               color="#FFF"
               _hover={{ background: shade(0.2, theme.colors.brand.primary) }}
-              transition="brackground, 0.2s"
+              transition="background, 0.2s"
               onClick={handleAddNewStep}
             >
               Salvar Etapa
