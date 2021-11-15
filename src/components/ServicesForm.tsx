@@ -95,9 +95,10 @@ const ServicesForm: React.FC = () => {
       {constructionSteps.length > 0 ? (
         constructionSteps.map(c => (
           <ConstructionStep
-            key={c.stepName}
+            key={c.id}
             stepName={c.stepName}
             services={c.services}
+            id={c.id}
           />
         ))
       ) : (

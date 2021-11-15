@@ -52,6 +52,7 @@ interface RootService {
 }
 
 interface IConstuctionStep {
+  id: string
   stepName: string
   services: IComposition[]
 }

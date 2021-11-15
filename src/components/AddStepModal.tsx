@@ -23,6 +23,7 @@ import {
 import axios from 'axios'
 import { shade } from 'polished'
 import { useCallback, useState } from 'react'
+import { uuid } from 'uuidv4'
 import { useBudget } from '../context/BudgetContext'
 
 interface RenderServicesModalProps {
@@ -182,6 +183,7 @@ const AddStepModal: React.FC<RenderServicesModalProps> = ({
     constructionStepsValue.push({
       stepName: stepName,
       services: getServices(),
+      id: uuid(),
     })
     setConstructionSteps(constructionStepsValue)
     setStepName('')

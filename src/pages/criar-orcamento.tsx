@@ -9,7 +9,7 @@ const createBudget: React.FC = () => {
   return (
     <div>
       <NextHead>
-        <title>MeuOrçamentoFacil | Criar Orçamento</title>
+        <title>OrçaApp | Criar Orçamento</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </NextHead>
       <BudgetProvider>
