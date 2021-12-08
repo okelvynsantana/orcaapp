@@ -394,15 +394,8 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
                           style: 'currency',
                         })}
                       </Td>
-
                       <Td>
                         {item.directCoast.toLocaleString('pt-BR', {
-                          currency: 'BRL',
-                          style: 'currency',
-                        })}
-                      </Td>
-                      <Td>
-                        {item.price.toLocaleString('pt-BR', {
                           currency: 'BRL',
                           style: 'currency',
                         })}
