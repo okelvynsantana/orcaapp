@@ -154,7 +154,6 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
     }
     setConstructionSteps(constructionStepsData)
     setCoastAndFinalPrice(constructionStepsData)
-    // constructionStepData[stepIndex].services =
 
     setEditComposition(false)
     setSelectedQtd('')
@@ -384,11 +383,18 @@ const ConstructionStep: React.FC<ConstructionStepProps> = ({
                         })}
                       </Td>
                       <Td>
+                        {item.price.toLocaleString('pt-BR', {
+                          currency: 'BRL',
+                          style: 'currency',
+                        })}
+                      </Td>
+                      <Td>
                         {item.unitCoast.toLocaleString('pt-BR', {
                           currency: 'BRL',
                           style: 'currency',
                         })}
                       </Td>
+
                       <Td>
                         {item.directCoast.toLocaleString('pt-BR', {
                           currency: 'BRL',

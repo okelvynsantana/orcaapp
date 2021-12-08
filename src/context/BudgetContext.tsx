@@ -104,7 +104,7 @@ function BudgetProvider({ children }) {
       const newConstructionSteps = constructionSteps.map(constructionStep => ({
         ...constructionStep,
         services: constructionStep.services.map(service => {
-          const compositionDirectCoast = service.price * service.qtd
+          const composition = service.price * service.qtd
 
           return {
             ...service,
@@ -134,7 +134,6 @@ function BudgetProvider({ children }) {
     let finalPrice = 0
     steps.map(cs => {
       cs.services.map(service => {
-        console.log(service)
         directCoast = directCoast + service.directCoast
         finalPrice = finalPrice + service.finalPrice
       })
