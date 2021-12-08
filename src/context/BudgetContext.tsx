@@ -104,7 +104,7 @@ function BudgetProvider({ children }) {
       const newConstructionSteps = constructionSteps.map(constructionStep => ({
         ...constructionStep,
         services: constructionStep.services.map(service => {
-          const composition = service.price * service.qtd
+          const compositionDirectCoast = service.price * service.qtd
 
           return {
             ...service,
